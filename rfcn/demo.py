@@ -62,7 +62,8 @@ def main():
                'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush']
 
     # load demo data
-    image_names = ['COCO_test2015_000000000891.jpg', 'COCO_test2015_000000001669.jpg']
+    # image_names = ['COCO_test2015_000000000891.jpg', 'COCO_test2015_000000001669.jpg']
+    image_names = ['COCO_test2015_000000000891.jpg']
     data = []
     for im_name in image_names:
         assert os.path.exists(cur_path + '/../demo/' + im_name), ('%s does not exist'.format('../demo/' + im_name))
@@ -84,7 +85,7 @@ def main():
     provide_label = [None for i in xrange(len(data))]
     arg_params, aux_params = load_param(cur_path + '/../model/' + ('rfcn_dcn_coco' if not args.rfcn_only else 'rfcn_coco'), 0, process=True)
     predictor = Predictor(sym, data_names, label_names,
-                          context=[mx.gpu(0)], max_data_shapes=max_data_shape,
+                          context=[mx.gpu(5)], max_data_shapes=max_data_shape,
                           provide_data=provide_data, provide_label=provide_label,
                           arg_params=arg_params, aux_params=aux_params)
     nms = gpu_nms_wrapper(config.TEST.NMS, 0)
