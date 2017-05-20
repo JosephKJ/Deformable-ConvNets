@@ -63,7 +63,7 @@ def main():
 
     # load demo data
     # image_names = ['COCO_test2015_000000000891.jpg', 'COCO_test2015_000000001669.jpg']
-    image_names = ['frame4000.jpg', 'COCO_test2015_000000000891.jpg']
+    image_names = ['frame4000.jpg']
     data = []
     for im_name in image_names:
         assert os.path.exists(cur_path + '/../demo/' + im_name), ('%s does not exist'.format('../demo/' + im_name))
@@ -116,7 +116,7 @@ def main():
             cls_dets = np.hstack((cls_boxes, cls_scores))
             keep = nms(cls_dets)
             cls_dets = cls_dets[keep, :]
-            cls_dets = cls_dets[cls_dets[:, -1] > 0.7, :]
+            cls_dets = cls_dets[cls_dets[:, -1] > 0.1, :]
             dets_nms.append(cls_dets)
         print 'testing {} {:.4f}s'.format(im_name, toc())
         # visualize
