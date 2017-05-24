@@ -39,7 +39,7 @@ class StanfordDroneDataset(IMDB):
         self.devkit_path = devkit_path
         self.data_path = os.path.join(devkit_path)
 
-        self._classes = ('__background__',  # always index 0
+        self.classes = ('__background__',  # always index 0
                          'pedestrian', 'biker', 'skater', 'car',
                          'bus', 'cart')
         self.num_classes = len(self.classes)
@@ -122,7 +122,7 @@ class StanfordDroneDataset(IMDB):
         overlaps = np.zeros((num_objs, self.num_classes), dtype=np.float32)
 
         class_to_index = dict(zip(self.classes, range(self.num_classes)))
-        print class_to_index
+
         # Load object bounding boxes into a data frame.
         for ix, obj in enumerate(objs):
             bbox = obj.find('bndbox')
@@ -130,7 +130,6 @@ class StanfordDroneDataset(IMDB):
             y1 = float(bbox.find('ymin').text)
             x2 = float(bbox.find('xmax').text)
             y2 = float(bbox.find('ymax').text)
-            print obj.find('name').text.lower().strip()
             cls = class_to_index[obj.find('name').text.lower().strip()]
             boxes[ix, :] = [x1, y1, x2, y2]
             gt_classes[ix] = cls
