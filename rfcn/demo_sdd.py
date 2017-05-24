@@ -108,7 +108,7 @@ def main():
             cls_dets = np.hstack((cls_boxes, cls_scores))
             keep = nms(cls_dets)
             cls_dets = cls_dets[keep, :]
-            cls_dets = cls_dets[cls_dets[:, -1] > 0.1, :]
+            cls_dets = cls_dets[cls_dets[:, -1] > 0.7, :]
             dets_nms.append(cls_dets)
         print 'testing {} {:.4f}s'.format(im_name, toc())
         # visualize
