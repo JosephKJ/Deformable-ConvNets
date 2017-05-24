@@ -21,7 +21,7 @@ os.environ['PYTHONUNBUFFERED'] = '1'
 os.environ['MXNET_CUDNN_AUTOTUNE_DEFAULT'] = '0'
 os.environ['MXNET_ENABLE_GPU_P2P'] = '0'
 cur_path = os.path.abspath(os.path.dirname(__file__))
-update_config(cur_path + '/../experiments/rfcn/cfgs/rfcn_coco_demo.yaml')
+update_config(cur_path + '/../experiments/rfcn/cfgs/resnet_v1_101_sdd_rfcn_dcn_end2end_ohem.yaml')
 
 sys.path.insert(0, os.path.join(cur_path, '../external/mxnet', config.MXNET_VERSION))
 import mxnet as mx
