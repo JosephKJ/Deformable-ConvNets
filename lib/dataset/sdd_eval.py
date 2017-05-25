@@ -84,7 +84,6 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
     with open(imageset_file, 'r') as f:
         lines = f.readlines()
     image_filenames = [x.strip() for x in lines]
-    print 'Loaded %d images from the test.txt', len(image_filenames)
 
     # load annotations from cache
     if not os.path.isfile(annocache):
@@ -99,16 +98,12 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
     else:
         with open(annocache, 'rb') as f:
             recs = cPickle.load(f)
-    print 'Loaded %d annotations from the cache', len(recs)
-    print 'One such annotation is:'
-    print recs['bookstore_video0_5058']
 
     # extract objects in :param classname:
     class_recs = {}
     npos = 0
     for image_filename in image_filenames:
         objects = [obj for obj in recs[image_filename] if obj['name'].lower() == classname]
-        print '---obj--->' + str(objects)
         bbox = np.array([x['bbox'] for x in objects])
         difficult = np.array([x['difficult'] for x in objects]).astype(np.bool)
         det = [False] * len(objects)  # stand for detected
@@ -116,8 +111,6 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
         class_recs[image_filename] = {'bbox': bbox,
                                       'difficult': difficult,
                                       'det': det}
-    print 'Length of classnames:', len(class_recs)
-    print classname
 
     # read detections
     detfile = detpath.format(classname)
@@ -179,11 +172,6 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
     # compute precision recall
     fp = np.cumsum(fp)
     tp = np.cumsum(tp)
-    print '--------'
-    print fp
-    print tp
-    print npos
-
     rec = tp / float(npos)
     # avoid division by zero in case first detection matches a difficult ground ruth
     prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
