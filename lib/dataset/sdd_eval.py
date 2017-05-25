@@ -107,7 +107,7 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
     class_recs = {}
     npos = 0
     for image_filename in image_filenames:
-        objects = [obj for obj in recs[image_filename] if obj['name'] == classname]
+        objects = [obj for obj in recs[image_filename] if obj['name'].lower() == classname]
         print '---obj--->' + str(objects)
         bbox = np.array([x['bbox'] for x in objects])
         difficult = np.array([x['difficult'] for x in objects]).astype(np.bool)
