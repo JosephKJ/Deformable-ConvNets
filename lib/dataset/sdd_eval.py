@@ -47,10 +47,6 @@ def sdd_ap(rec, prec, use_07_metric=False):
     if use_07_metric:
         ap = 0.
         for t in np.arange(0., 1.1, 0.1):
-            print '---**---'
-            print rec
-            print t
-
             if np.sum(rec >= t) == 0:
                 p = 0
             else:
@@ -88,6 +84,7 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
     with open(imageset_file, 'r') as f:
         lines = f.readlines()
     image_filenames = [x.strip() for x in lines]
+    print 'Loaded %d images from the test.txt', len(image_filenames)
 
     # load annotations from cache
     if not os.path.isfile(annocache):
@@ -102,6 +99,9 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
     else:
         with open(annocache, 'rb') as f:
             recs = cPickle.load(f)
+    print 'Loaded %d annotations from the cache', len(recs)
+    print 'One such annotation is:'
+    print recs[0]
 
     # extract objects in :param classname:
     class_recs = {}
