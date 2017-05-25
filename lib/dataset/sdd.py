@@ -275,7 +275,7 @@ class StanfordDroneDataset(IMDB):
         annocache = os.path.join(self.cache_path, self.name + '_annotations.pkl')
         aps = []
         # The PASCAL VOC metric changed in 2010
-        use_07_metric = False
+        use_07_metric = True
         print 'VOC07 metric? ' + ('Y' if use_07_metric else 'No')
         info_str += 'VOC07 metric? ' + ('Y' if use_07_metric else 'No')
         info_str += '\n'
