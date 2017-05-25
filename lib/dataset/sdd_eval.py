@@ -101,7 +101,7 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
             recs = cPickle.load(f)
     print 'Loaded %d annotations from the cache', len(recs)
     print 'One such annotation is:'
-    print recs[0]
+    print recs.popitem()
 
     # extract objects in :param classname:
     class_recs = {}
