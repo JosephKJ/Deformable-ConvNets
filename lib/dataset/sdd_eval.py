@@ -47,6 +47,10 @@ def sdd_ap(rec, prec, use_07_metric=False):
     if use_07_metric:
         ap = 0.
         for t in np.arange(0., 1.1, 0.1):
+            print '---**---'
+            print rec
+            print t
+
             if np.sum(rec >= t) == 0:
                 p = 0
             else:
@@ -172,6 +176,11 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
     # compute precision recall
     fp = np.cumsum(fp)
     tp = np.cumsum(tp)
+    print '--------'
+    print fp
+    print tp
+    print npos
+
     rec = tp / float(npos)
     # avoid division by zero in case first detection matches a difficult ground ruth
     prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
