@@ -115,6 +115,8 @@ def sdd_eval(detpath, annopath, imageset_file, classname, annocache, ovthresh=0.
         class_recs[image_filename] = {'bbox': bbox,
                                       'difficult': difficult,
                                       'det': det}
+    print 'Length of classnames:', len(class_recs)
+    print classname
 
     # read detections
     detfile = detpath.format(classname)
