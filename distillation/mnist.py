@@ -2,6 +2,7 @@ import mxnet as mx
 import gzip
 import struct
 import numpy as np
+import requests
 
 def get_mnist():
     """Download and load the MNIST dataset
