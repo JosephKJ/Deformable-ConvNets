@@ -48,26 +48,31 @@ test_dataiter = mx.io.ImageRecordIter(
 train_iter = train_dataiter
 val_iter = test_dataiter
 test_iter = test_dataiter
+eps = 1e-5
 
 
 
 # Building the network
 print 'Building Network.'
 data = mx.sym.Variable('data')
-# Conv-Relu 1
+# Conv-BN-Relu 1
 conv1 = mx.sym.Convolution(data=data, kernel=(7,7), num_filter=64, pad=(3, 3), stride=(2, 2))
-relu1 = mx.sym.Activation(data=conv1, act_type="relu")
+bn_conv1 = mx.symbol.BatchNorm(name='bn_conv1', data=conv1, use_global_stats=True, fix_gamma=False, eps=eps)
+relu1 = mx.sym.Activation(data=bn_conv1, act_type="relu")
 # Pool 1
 pool1 = mx.sym.Pooling(data=relu1, pool_type="avg", kernel=(3,3), stride=(2,2))
-# Conv-Relu 2
+# Conv-BN-Relu 2
 conv2 = mx.sym.Convolution(data=pool1, kernel=(1,1), num_filter=256, pad=(0, 0), stride=(1, 1))
-relu2 = mx.sym.Activation(data=conv2, act_type="relu")
-# Conv-Relu 3
+bn_conv2 = mx.symbol.BatchNorm(name='bn_conv2', data=conv2, use_global_stats=True, fix_gamma=False, eps=eps)
+relu2 = mx.sym.Activation(data=bn_conv2, act_type="relu")
+# Conv-BN-Relu 3
 conv3 = mx.sym.Convolution(data=relu2, kernel=(1,1), num_filter=512, pad=(0, 0), stride=(2, 2))
-relu3 = mx.sym.Activation(data=conv3, act_type="relu")
-# Conv-Relu 4
+bn_conv3 = mx.symbol.BatchNorm(name='bn_conv3', data=conv3, use_global_stats=True, fix_gamma=False, eps=eps)
+relu3 = mx.sym.Activation(data=bn_conv3, act_type="relu")
+# Conv-BN-Relu 4
 conv4 = mx.sym.Convolution(data=relu3, kernel=(1,1), num_filter=1024, pad=(0, 0), stride=(2, 2))
-relu4 = mx.sym.Activation(data=conv4, act_type="relu")
+bn_conv4 = mx.symbol.BatchNorm(name='bn_conv4', data=conv4, use_global_stats=True, fix_gamma=False, eps=eps)
+relu4 = mx.sym.Activation(data=bn_conv4, act_type="relu")
 # Fully Connected 1
 flatten = mx.sym.Flatten(data=relu4)
 fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=10)
