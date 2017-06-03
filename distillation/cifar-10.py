@@ -49,6 +49,8 @@ train_iter = train_dataiter
 val_iter = test_dataiter
 test_iter = test_dataiter
 
+
+
 # Building the network
 print 'Building Network.'
 data = mx.sym.Variable('data')
@@ -70,6 +72,7 @@ fc2 = mx.symbol.FullyConnected(data=relu3, num_hidden=10)
 lenet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 
 
+
 print 'Building Module.'
 # Module
 lenet_module = mx.mod.Module(lenet, context=mx.gpu(5))
@@ -77,7 +80,7 @@ lenet_module = mx.mod.Module(lenet, context=mx.gpu(5))
 print 'Training.'
 # Train
 lenet_module.fit(train_data=train_iter, eval_data=val_iter,
-                 batch_end_callback=[mx.callback.Speedometer(batch_size, 100)], num_epoch=50)
+                 batch_end_callback=[mx.callback.Speedometer(batch_size, 100)], num_epoch=15)
 
 print 'Testing.'
 # Test
