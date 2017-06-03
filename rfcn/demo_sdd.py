@@ -43,8 +43,6 @@ def parse_args():
 args = parse_args()
 
 def main():
-    print cur_path + '/../model/' + ('rfcn_sdd' if not args.rfcn_only else 'rfcn_sdd')
-
     # get symbol
     pprint.pprint(config)
     config.symbol = 'resnet_v1_101_rfcn_dcn' if not args.rfcn_only else 'resnet_v1_101_rfcn'
