@@ -43,6 +43,8 @@ def parse_args():
 args = parse_args()
 
 def main():
+    print cur_path + '/../model/' + ('rfcn_sdd' if not args.rfcn_only else 'rfcn_sdd')
+
     # get symbol
     pprint.pprint(config)
     config.symbol = 'resnet_v1_101_rfcn_dcn' if not args.rfcn_only else 'resnet_v1_101_rfcn'
@@ -75,7 +77,7 @@ def main():
     max_data_shape = [[('data', (1, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]]
     provide_data = [[(k, v.shape) for k, v in zip(data_names, data[i])] for i in xrange(len(data))]
     provide_label = [None for i in xrange(len(data))]
-    print cur_path + '/../model/' + ('rfcn_sdd' if not args.rfcn_only else 'rfcn_sdd')
+
     arg_params, aux_params = load_param(cur_path + '/../model/' + ('rfcn_sdd' if not args.rfcn_only else 'rfcn_sdd'), 0, process=True)
     predictor = Predictor(sym, data_names, label_names,
                           context=[mx.gpu(5)], max_data_shapes=max_data_shape,
