@@ -87,7 +87,7 @@ net_module = mx.mod.Module(net, context=mx.gpu(5))
 
 print 'Training.'
 # Train
-optimizer_params = {'lr_scheduler': 0.001}
+optimizer_params = {'lr_scheduler': '0.001'}
 net_module.fit(train_data=train_iter, eval_data=val_iter, optimizer_params=optimizer_params,
                  batch_end_callback=[mx.callback.Speedometer(batch_size, 100)], num_epoch=20)
 
