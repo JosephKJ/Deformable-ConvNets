@@ -727,9 +727,9 @@ class resnet_v1_101_rfcn_dcn(Symbol):
         print '***'
         arg_shape, output_shape, aux_shape = conv_feat.infer_shape(data=(1, 3, 128, 128))
         print output_shape
-        arg_shape, output_shape, aux_shape = conv_feat.infer_shape(data=(1, 3, 600, 800))
+        arg_shape, output_shape, aux_shape = conv_feat.infer_shape(data=(1, 3, 600, 785))
         print output_shape
-        arg_shape, output_shape, aux_shape = conv_feat.infer_shape(data=(1, 1024, 224, 224))
+        arg_shape, output_shape, aux_shape = conv_feat.infer_shape(data=(1, 3, 817, 600))
         print output_shape
         print '***'
 
