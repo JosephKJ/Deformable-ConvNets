@@ -67,12 +67,9 @@ conv3 = mx.sym.Convolution(data=pool2, kernel=(1,1), num_filter=50)
 relu3 = mx.sym.Activation(data=conv3, act_type="relu")
 # Fully Connected 1
 flatten = mx.sym.Flatten(data=relu3)
-fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=500)
-relu3 = mx.sym.Activation(data=fc1, act_type="relu")
-# Fully Connected 2
-fc2 = mx.symbol.FullyConnected(data=relu3, num_hidden=10)
+fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=10)
 # Softmax
-lenet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
+lenet = mx.sym.SoftmaxOutput(data=fc1, name='softmax')
 
 
 
