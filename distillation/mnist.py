@@ -1,10 +1,8 @@
 import mxnet as mx
+import os
 
 # Character recognition using Lenet.
 # Using MNIST dataset.
-
-
-import os
 
 def GetCifar10():
     if not os.path.isdir("data/"):
@@ -19,10 +17,9 @@ def GetCifar10():
         os.chdir("..")
 
 GetCifar10()
-# After we get the data, we can declare our data iterator
-# The iterator will automatically create mean image file if it doesn't exist
 batch_size = 128
 total_batch = 50000 / 128 + 1
+
 # Train iterator make batch of 128 image, and random crop each image into 3x28x28 from original 3x32x32
 train_dataiter = mx.io.ImageRecordIter(
         shuffle=True,
@@ -48,6 +45,7 @@ test_dataiter = mx.io.ImageRecordIter(
 
 train_iter = train_dataiter
 val_iter = test_dataiter
+test_iter = test_dataiter
 
 # Building the network
 
