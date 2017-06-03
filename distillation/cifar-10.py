@@ -73,17 +73,11 @@ relu3 = mx.sym.Activation(data=bn_conv3, act_type="relu")
 conv4 = mx.sym.Convolution(data=relu3, kernel=(1,1), num_filter=1024, pad=(0, 0), stride=(2, 2))
 bn_conv4 = mx.symbol.BatchNorm(name='bn_conv4', data=conv4, use_global_stats=True, fix_gamma=False, eps=eps)
 relu4 = mx.sym.Activation(data=bn_conv4, act_type="relu")
-
-# Conv-BN-Relu 5
-conv5 = mx.sym.Convolution(data=relu4, kernel=(1,1), num_filter=12, pad=(0, 0), stride=(1, 1))
-# bn_conv5 = mx.symbol.BatchNorm(name='bn_conv5', data=conv5, use_global_stats=True, fix_gamma=False, eps=eps)
-# relu5 = mx.sym.Activation(data=bn_conv5, act_type="relu")
-
 # Fully Connected 1
-flatten = mx.sym.Flatten(data=conv5)
-# fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=10)
+flatten = mx.sym.Flatten(data=relu4)
+fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=10)
 # Softmax
-net = mx.sym.SoftmaxOutput(data=flatten, name='softmax')
+net = mx.sym.SoftmaxOutput(data=fc1, name='softmax')
 
 
 
