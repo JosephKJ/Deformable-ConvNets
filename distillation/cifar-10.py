@@ -63,7 +63,7 @@ conv2 = mx.sym.Convolution(data=pool1, kernel=(5,5), num_filter=50)
 relu2 = mx.sym.Activation(data=conv2, act_type="relu")
 pool2 = mx.sym.Pooling(data=relu2, pool_type="max", kernel=(2,2), stride=(2,2))
 # Conv-Relu-Pool 3
-conv3 = mx.sym.Convolution(data=pool2, kernel=(5,5), num_filter=50)
+conv3 = mx.sym.Convolution(data=pool2, kernel=(1,1), num_filter=50)
 relu3 = mx.sym.Activation(data=conv3, act_type="relu")
 # Fully Connected 1
 flatten = mx.sym.Flatten(data=relu3)
