@@ -48,7 +48,7 @@ val_iter = test_dataiter
 test_iter = test_dataiter
 
 # Building the network
-
+print 'Building Network.'
 data = mx.sym.Variable('data')
 # Conv-Relu-Pool 1
 conv1 = mx.sym.Convolution(data=data, kernel=(5,5), num_filter=20)
@@ -68,14 +68,18 @@ fc2 = mx.symbol.FullyConnected(data=relu3, num_hidden=10)
 lenet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 
 
+print 'Building Module'
 # Module
 lenet_module = mx.mod.Module(lenet)
 
+print 'Training'
 # Train
 lenet_module.fit(train_data=train_iter, eval_data=val_iter,
                  batch_end_callback=mx.callback.Speedometer(batch_size, 100), num_epoch=10)
 
+print 'Testing'
 # Test
 acc = mx.metric.Accuracy()
 lenet_module.score(test_iter, acc)
+
 print acc
