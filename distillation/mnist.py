@@ -17,10 +17,10 @@ def GetCifar10():
         os.chdir("..")
 
 GetCifar10()
+
 batch_size = 128
 total_batch = 50000 / 128 + 1
 
-# Train iterator make batch of 128 image, and random crop each image into 3x28x28 from original 3x32x32
 train_dataiter = mx.io.ImageRecordIter(
         shuffle=True,
         path_imgrec="data/cifar/train.rec",
@@ -30,8 +30,7 @@ train_dataiter = mx.io.ImageRecordIter(
         data_shape=(3,28,28),
         batch_size=batch_size,
         preprocess_threads=1)
-# test iterator make batch of 128 image, and center crop each image into 3x28x28 from original 3x32x32
-# Note: We don't need round batch in test because we only test once at one time
+
 test_dataiter = mx.io.ImageRecordIter(
         path_imgrec="data/cifar/test.rec",
         mean_img="data/cifar/cifar_mean.bin",
@@ -70,12 +69,12 @@ lenet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 
 print 'Building Module.'
 # Module
-lenet_module = mx.mod.Module(lenet)
+lenet_module = mx.mod.Module(lenet, context=mx.gpu(0))
 
 print 'Training.'
 # Train
 lenet_module.fit(train_data=train_iter, eval_data=val_iter,
-                 batch_end_callback=mx.callback.Speedometer(batch_size=batch_size), num_epoch=10)
+                 batch_end_callback=mx.callback.Speedometer(10, 10), num_epoch=1)
 
 print 'Testing.'
 # Test
