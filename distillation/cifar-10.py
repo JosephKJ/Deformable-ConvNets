@@ -75,7 +75,7 @@ bn_conv4 = mx.symbol.BatchNorm(name='bn_conv4', data=conv4, use_global_stats=Tru
 relu4 = mx.sym.Activation(data=bn_conv4, act_type="relu")
 
 # Conv-BN-Relu 5
-conv5 = mx.sym.Convolution(data=relu4, kernel=(1,1), num_filter=10, pad=(0, 0), stride=(1, 1))
+conv5 = mx.sym.Convolution(data=relu4, kernel=(1,1), num_filter=12, pad=(0, 0), stride=(1, 1))
 # bn_conv5 = mx.symbol.BatchNorm(name='bn_conv5', data=conv5, use_global_stats=True, fix_gamma=False, eps=eps)
 # relu5 = mx.sym.Activation(data=bn_conv5, act_type="relu")
 
