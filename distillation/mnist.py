@@ -1,5 +1,8 @@
 import mxnet as mx
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 # Character recognition using Lenet.
 # Using MNIST dataset.
@@ -69,12 +72,12 @@ lenet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 
 print 'Building Module.'
 # Module
-lenet_module = mx.mod.Module(lenet, context=mx.gpu(0))
+lenet_module = mx.mod.Module(lenet, context=mx.cpu())
 
 print 'Training.'
 # Train
 lenet_module.fit(train_data=train_iter, eval_data=val_iter,
-                 batch_end_callback=mx.callback.Speedometer(10, 10), num_epoch=1)
+                 batch_end_callback=[mx.callback.Speedometer(10, 10)], num_epoch=1)
 
 print 'Testing.'
 # Test
@@ -82,3 +85,5 @@ acc = mx.metric.Accuracy()
 lenet_module.score(test_iter, acc)
 
 print acc
+
+
