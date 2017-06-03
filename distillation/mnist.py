@@ -3,7 +3,8 @@ import mxnet as mx
 # Character recognition using Lenet.
 # Using MNIST dataset.
 
-mnist = mx.test_utils.get_mnist()
+from sklearn.datasets import fetch_mldata
+mnist = fetch_mldata('MNIST original')
 
 batch_size = 100
 train_iter = mx.io.NDArrayIter(mnist['train_data'], mnist['train_label'], batch_size, shuffle=True)
