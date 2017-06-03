@@ -5,11 +5,14 @@ import mxnet as mx
 
 from sklearn.datasets import fetch_mldata
 mnist = fetch_mldata('MNIST original')
+X, y = mnist.data / 255., mnist.target
+X_train, X_test = X[:60000], X[60000:]
+y_train, y_test = y[:60000], y[60000:]
 
 batch_size = 100
-train_iter = mx.io.NDArrayIter(mnist['train_data'], mnist['train_label'], batch_size, shuffle=True)
-val_iter = mx.io.NDArrayIter(mnist['test_data'], mnist['test_label'], batch_size)
-test_iter = mx.io.NDArrayIter(mnist['test_data'], mnist['test_label'], batch_size)
+train_iter = mx.io.NDArrayIter(X_train, y_train, batch_size, shuffle=True)
+val_iter = mx.io.NDArrayIter(X_test, y_test, batch_size)
+test_iter = mx.io.NDArrayIter(X_test, y_test, batch_size)
 
 # Building the network
 
