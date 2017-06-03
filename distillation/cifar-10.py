@@ -54,38 +54,41 @@ test_iter = test_dataiter
 # Building the network
 print 'Building Network.'
 data = mx.sym.Variable('data')
-# Conv-Relu-Pool 1
-conv1 = mx.sym.Convolution(data=data, kernel=(5,5), num_filter=20)
+# Conv-Relu 1
+conv1 = mx.sym.Convolution(data=data, kernel=(7,7), num_filter=64, pad=(3, 3), stride=(2, 2))
 relu1 = mx.sym.Activation(data=conv1, act_type="relu")
-pool1 = mx.sym.Pooling(data=relu1, pool_type="max", kernel=(2,2), stride=(2,2))
-# Conv-Relu-Pool 2
-conv2 = mx.sym.Convolution(data=pool1, kernel=(5,5), num_filter=50)
+# Pool 1
+pool1 = mx.sym.Pooling(data=relu1, pool_type="avg", kernel=(3,3), stride=(2,2))
+# Conv-Relu 2
+conv2 = mx.sym.Convolution(data=pool1, kernel=(1,1), num_filter=256, pad=(0, 0), stride=(1, 1))
 relu2 = mx.sym.Activation(data=conv2, act_type="relu")
-pool2 = mx.sym.Pooling(data=relu2, pool_type="max", kernel=(2,2), stride=(2,2))
-# Conv-Relu-Pool 3
-conv3 = mx.sym.Convolution(data=pool2, kernel=(1,1), num_filter=50)
+# Conv-Relu 3
+conv3 = mx.sym.Convolution(data=relu2, kernel=(1,1), num_filter=512, pad=(0, 0), stride=(2, 2))
 relu3 = mx.sym.Activation(data=conv3, act_type="relu")
+# Conv-Relu 4
+conv4 = mx.sym.Convolution(data=relu3, kernel=(1,1), num_filter=1024, pad=(0, 0), stride=(2, 2))
+relu4 = mx.sym.Activation(data=conv4, act_type="relu")
 # Fully Connected 1
-flatten = mx.sym.Flatten(data=relu3)
+flatten = mx.sym.Flatten(data=relu4)
 fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=10)
 # Softmax
-lenet = mx.sym.SoftmaxOutput(data=fc1, name='softmax')
+net = mx.sym.SoftmaxOutput(data=fc1, name='softmax')
 
 
 
 print 'Building Module.'
 # Module
-lenet_module = mx.mod.Module(lenet, context=mx.gpu(5))
+net_module = mx.mod.Module(net, context=mx.gpu(5))
 
 print 'Training.'
 # Train
-lenet_module.fit(train_data=train_iter, eval_data=val_iter,
+net_module.fit(train_data=train_iter, eval_data=val_iter,
                  batch_end_callback=[mx.callback.Speedometer(batch_size, 100)], num_epoch=15)
 
 print 'Testing.'
 # Test
 acc = mx.metric.Accuracy()
-lenet_module.score(test_iter, acc)
+net_module.score(test_iter, acc)
 
 print acc
 
