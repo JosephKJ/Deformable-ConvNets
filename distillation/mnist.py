@@ -68,16 +68,16 @@ fc2 = mx.symbol.FullyConnected(data=relu3, num_hidden=10)
 lenet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 
 
-print 'Building Module'
+print 'Building Module.'
 # Module
 lenet_module = mx.mod.Module(lenet)
 
-print 'Training'
+print 'Training.'
 # Train
 lenet_module.fit(train_data=train_iter, eval_data=val_iter,
-                 batch_end_callback=mx.callback.Speedometer(batch_size, 100), num_epoch=10)
+                 batch_end_callback=mx.callback.Speedometer(batch_size, 1), num_epoch=1)
 
-print 'Testing'
+print 'Testing.'
 # Test
 acc = mx.metric.Accuracy()
 lenet_module.score(test_iter, acc)
