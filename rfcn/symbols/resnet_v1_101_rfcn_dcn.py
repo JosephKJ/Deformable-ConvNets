@@ -726,9 +726,11 @@ class resnet_v1_101_rfcn_dcn(Symbol):
 
         print '***'
         arg_shape, output_shape, aux_shape = conv_feat.infer_shape(data=(1, 3, 128, 128))
-        print arg_shape
         print output_shape
-        print aux_shape
+        arg_shape, output_shape, aux_shape = conv_feat.infer_shape(data=(1, 3, 600, 800))
+        print output_shape
+        arg_shape, output_shape, aux_shape = conv_feat.infer_shape(data=(1, 1024, 600, 800))
+        print output_shape
         print '***'
 
         rpn_cls_score, rpn_bbox_pred = self.get_rpn(conv_feat, num_anchors)
