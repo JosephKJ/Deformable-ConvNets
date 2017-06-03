@@ -4,10 +4,21 @@ import mxnet as mx
 # Using MNIST dataset.
 
 
-import sys
-sys.path.append("../../tests/python/common") # change the path to mxnet's tests/
-import get_data
-get_data.GetCifar10()
+import os
+
+def GetCifar10():
+    if not os.path.isdir("data/"):
+        os.system("mkdir data/")
+    if (not os.path.exists('data/cifar/train.rec')) or \
+       (not os.path.exists('data/cifar/test.rec')) or \
+       (not os.path.exists('data/cifar/train.lst')) or \
+       (not os.path.exists('data/cifar/test.lst')):
+        os.system("wget -q http://data.mxnet.io/mxnet/data/cifar10.zip -P data/")
+        os.chdir("./data")
+        os.system("unzip -u cifar10.zip")
+        os.chdir("..")
+
+GetCifar10()
 # After we get the data, we can declare our data iterator
 # The iterator will automatically create mean image file if it doesn't exist
 batch_size = 128
