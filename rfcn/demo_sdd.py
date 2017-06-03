@@ -76,6 +76,15 @@ def main():
     provide_data = [[(k, v.shape) for k, v in zip(data_names, data[i])] for i in xrange(len(data))]
     provide_label = [None for i in xrange(len(data))]
 
+    print '--*--'
+    print data_names
+    print label_names
+    print max_data_shape
+    print provide_data
+    print provide_label
+    print '--*--'
+
+
     arg_params, aux_params = load_param(cur_path + '/../model/' + ('rfcn_sdd' if not args.rfcn_only else 'rfcn_sdd'), 0, process=True)
     predictor = Predictor(sym, data_names, label_names,
                           context=[mx.gpu(5)], max_data_shapes=max_data_shape,
