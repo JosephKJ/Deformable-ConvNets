@@ -75,7 +75,7 @@ lenet_module = mx.mod.Module(lenet)
 print 'Training.'
 # Train
 lenet_module.fit(train_data=train_iter, eval_data=val_iter,
-                 batch_end_callback=mx.callback.Speedometer(batch_size, 1), num_epoch=1)
+                 batch_end_callback=mx.callback.Speedometer(100, 1), num_epoch=1)
 
 print 'Testing.'
 # Test
