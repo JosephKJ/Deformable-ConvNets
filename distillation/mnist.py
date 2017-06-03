@@ -3,20 +3,44 @@ import mxnet as mx
 # Character recognition using Lenet.
 # Using MNIST dataset.
 
-from sklearn.datasets import fetch_mldata
-mnist = fetch_mldata('MNIST original')
-X, y = mnist.data / 255., mnist.target
-X_train, X_test = X[:60000], X[60000:]
-y_train, y_test = y[:60000], y[60000:]
 
-batch_size = 100
-train_iter = mx.io.NDArrayIter(X_train, y_train, batch_size, shuffle=True)
-val_iter = mx.io.NDArrayIter(X_test, y_test, batch_size)
-test_iter = mx.io.NDArrayIter(X_test, y_test, batch_size)
+import sys
+sys.path.append("../../tests/python/common") # change the path to mxnet's tests/
+import get_data
+get_data.GetCifar10()
+# After we get the data, we can declare our data iterator
+# The iterator will automatically create mean image file if it doesn't exist
+batch_size = 128
+total_batch = 50000 / 128 + 1
+# Train iterator make batch of 128 image, and random crop each image into 3x28x28 from original 3x32x32
+train_dataiter = mx.io.ImageRecordIter(
+        shuffle=True,
+        path_imgrec="data/cifar/train.rec",
+        mean_img="data/cifar/cifar_mean.bin",
+        rand_crop=True,
+        rand_mirror=True,
+        data_shape=(3,28,28),
+        batch_size=batch_size,
+        preprocess_threads=1)
+# test iterator make batch of 128 image, and center crop each image into 3x28x28 from original 3x32x32
+# Note: We don't need round batch in test because we only test once at one time
+test_dataiter = mx.io.ImageRecordIter(
+        path_imgrec="data/cifar/test.rec",
+        mean_img="data/cifar/cifar_mean.bin",
+        rand_crop=False,
+        rand_mirror=False,
+        data_shape=(3,28,28),
+        batch_size=batch_size,
+        round_batch=False,
+        preprocess_threads=1)
+
+
+train_iter = train_dataiter
+val_iter = test_dataiter
 
 # Building the network
 
-data = mx.sym.var('data')
+data = mx.sym.Variable('data')
 # Conv-Relu-Pool 1
 conv1 = mx.sym.Convolution(data=data, kernel=(5,5), num_filter=20)
 relu1 = mx.sym.Activation(data=conv1, act_type="relu")
@@ -26,7 +50,7 @@ conv2 = mx.sym.Convolution(data=pool1, kernel=(5,5), num_filter=50)
 relu2 = mx.sym.Activation(data=conv2, act_type="relu")
 pool2 = mx.sym.Pooling(data=relu2, pool_type="max", kernel=(2,2), stride=(2,2))
 # Fully Connected 1
-flatten = mx.sym.flatten(data=pool2)
+flatten = mx.sym.Flatten(data=pool2)
 fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=500)
 relu3 = mx.sym.Activation(data=fc1, act_type="relu")
 # Fully Connected 2
