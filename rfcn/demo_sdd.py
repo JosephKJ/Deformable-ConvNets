@@ -55,7 +55,7 @@ def main():
 
     # load demo data
     # image_names = ['COCO_test2015_000000000891.jpg', 'COCO_test2015_000000001669.jpg']
-    image_names = ['frame4000.jpg', 'nexus_video1_8898.jpg']
+    image_names = ['frame4000.jpg', 'nexus_video1_8898.jpg', 'deathCircle_video1_1071.jpg', 'quad_video1_91.jpg']
     data = []
     for im_name in image_names:
         assert os.path.exists(cur_path + '/../demo/' + im_name), ('%s does not exist'.format('../demo/' + im_name))
