@@ -28,8 +28,10 @@ from utils.create_logger import create_logger
 
 def main():
 
+    print '---'
     print args
-    print config.gpus
+    print config.symbol
+    print '---'
     # logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
 
 
