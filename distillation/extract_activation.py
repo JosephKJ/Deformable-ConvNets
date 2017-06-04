@@ -90,15 +90,16 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
         max_data_shape.append(('rois', (cfg.TEST.PROPOSAL_POST_NMS_TOP_N + 30, 5)))
 
     print max_data_shape
-    print 'Joseph'
-    # create predictor
-    predictor = Predictor(sym, data_names, label_names,
-                          context=ctx, max_data_shapes=max_data_shape,
-                          provide_data=test_data.provide_data, provide_label=test_data.provide_label,
-                          arg_params=arg_params, aux_params=aux_params)
-
-    # start detection
-    pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
+    print 'Done.'
+    #
+    # # create predictor
+    # predictor = Predictor(sym, data_names, label_names,
+    #                       context=ctx, max_data_shapes=max_data_shape,
+    #                       provide_data=test_data.provide_data, provide_label=test_data.provide_label,
+    #                       arg_params=arg_params, aux_params=aux_params)
+    #
+    # # start detection
+    # pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
 
 
 def main():
