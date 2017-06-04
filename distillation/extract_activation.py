@@ -13,11 +13,19 @@ from dataset import *
 from config.config import config, update_config
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Extract the activations of a penultimate layer.')
+    parser = argparse.ArgumentParser(description='Test a R-FCN network')
     # general
     parser.add_argument('--cfg', help='experiment configure file name', required=True, type=str)
-    args = parser.parse_args()
+
+    args, rest = parser.parse_known_args()
     update_config(args.cfg)
+
+    # rcnn
+    parser.add_argument('--vis', help='turn on visualization', action='store_true')
+    parser.add_argument('--ignore_cache', help='ignore cached results boxes', action='store_true')
+    parser.add_argument('--thresh', help='valid detection threshold', default=1e-3, type=float)
+    parser.add_argument('--shuffle', help='shuffle data on visualization', action='store_true')
+    args = parser.parse_args()
     return args
 
 args = parse_args()
