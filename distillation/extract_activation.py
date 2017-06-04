@@ -98,7 +98,7 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
                           arg_params=arg_params, aux_params=aux_params)
 
     # start detection
-    # pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
+    pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
 
 
 def main():
