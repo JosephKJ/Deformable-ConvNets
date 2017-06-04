@@ -43,6 +43,7 @@ def main():
     roidb = imdb.gt_roidb()
 
     # get test data iter
+    print len(ctx)
     test_data = TestLoader(roidb, config, batch_size=len(ctx), shuffle=True, has_rpn=True)
     print 'Loaded iterators'
 
