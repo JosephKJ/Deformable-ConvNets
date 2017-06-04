@@ -37,7 +37,7 @@ curr_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(curr_path, '../external/mxnet', config.MXNET_VERSION))
 
 import mxnet as mx
-from function.test_rcnn import test_rcnn
+from test_rcnn import test_rcnn
 from utils.create_logger import create_logger
 
 
