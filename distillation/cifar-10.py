@@ -110,6 +110,9 @@ print 'Training.'
 net_module.fit(train_data=train_iter, eval_data=val_iter, optimizer_params=(('learning_rate', 0.01), ),
                  batch_end_callback=[mx.callback.Speedometer(batch_size, 100)], num_epoch=20)
 
+all_layers = lenet.get_internals()
+all_layers.list_outputs()[-10:]
+
 print 'Testing.'
 # Test
 acc = mx.metric.Accuracy()
