@@ -15,6 +15,7 @@ def parse_args():
     # general
     parser.add_argument('--cfg', help='experiment configure file name', required=True, type=str)
     args = parser.parse_args()
+    update_config(args.cfg)
     return args
 
 args = parse_args()
