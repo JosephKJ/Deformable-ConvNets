@@ -44,6 +44,7 @@ def main():
 
     # get test data iter
     test_data = TestLoader(roidb, config, batch_size=len(ctx), shuffle=True, has_rpn=True)
+    print 'Loaded iterators'
 
     # load model
     prefix = os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix)
