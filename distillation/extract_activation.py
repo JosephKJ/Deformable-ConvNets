@@ -3,6 +3,8 @@
 # Author: Joseph K J
 # --------------------------------------------------------
 
+import _init_paths
+
 import argparse
 import os
 import sys
