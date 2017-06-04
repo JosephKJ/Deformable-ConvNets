@@ -47,20 +47,9 @@ import mxnet as mx
 from utils.create_logger import create_logger
 
 
-def main():
-    ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]
-    print args
-
-    logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
-
-    test_rcnn(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
-              ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
-              args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
-
-
-def test_rcnn(cfg, dataset, image_set, root_path, dataset_path,
-              ctx, prefix, epoch,
-              vis, ignore_cache, shuffle, has_rpn, proposal, thresh, logger=None, output_path=None):
+def get_activation(cfg, dataset, image_set, root_path, dataset_path,
+                   ctx, prefix, epoch,
+                   vis, ignore_cache, shuffle, has_rpn, proposal, thresh, logger=None, output_path=None):
     if not logger:
         assert False, 'require a logger'
 
@@ -100,6 +89,8 @@ def test_rcnn(cfg, dataset, image_set, root_path, dataset_path,
     if not has_rpn:
         max_data_shape.append(('rois', (cfg.TEST.PROPOSAL_POST_NMS_TOP_N + 30, 5)))
 
+    print max_data_shape
+    print 'Joseph'
     # create predictor
     predictor = Predictor(sym, data_names, label_names,
                           context=ctx, max_data_shapes=max_data_shape,
@@ -108,6 +99,17 @@ def test_rcnn(cfg, dataset, image_set, root_path, dataset_path,
 
     # start detection
     pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
+
+
+def main():
+    ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]
+    print args
+
+    logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
+
+    get_activation(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
+                   ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
+                   args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
 
 
 if __name__ == '__main__':
