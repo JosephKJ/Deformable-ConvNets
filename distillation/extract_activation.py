@@ -1,15 +1,19 @@
 # --------------------------------------------------------
-# Distilling R-FCN Networks
-# Author: Joseph K J
+# Deformable Convolutional Networks
+# Copyright (c) 2016 by Contributors
+# Copyright (c) 2017 Microsoft
+# Licensed under The Apache-2.0 License [see LICENSE for details]
+# Modified by Yuwen Xiong
 # --------------------------------------------------------
 
 import _init_paths
 
+import cv2
 import argparse
 import os
 import sys
-from symbols import *
-from dataset import *
+import time
+import logging
 from config.config import config, update_config
 
 def parse_args():
@@ -35,53 +39,17 @@ sys.path.insert(0, os.path.join(curr_path, '../external/mxnet', config.MXNET_VER
 import mxnet as mx
 from function.test_rcnn import test_rcnn
 from utils.create_logger import create_logger
-from core.loader import TestLoader
-from utils.load_model import load_param
+
 
 def main():
     ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]
     print args
 
-    logger, final_output_path = create_logger(config.output_path, args.cfg, 'activations')
+    logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
 
-    # load symbol and testing data
-    sym_instance = eval(config.symbol + '.' + config.symbol)()
-    sym = sym_instance.get_symbol(config, is_train=False)
-    imdb = eval(config.dataset.dataset)(config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path, result_path=final_output_path)
-    roidb = imdb.gt_roidb()
-
-    # # get test data iter
-    # print len(ctx)
-    # print len(roidb)
-    # test_data = TestLoader(roidb, config, batch_size=len(ctx), shuffle=True, has_rpn=True)
-    # print 'Loaded iterators'
-    #
-    # # load model
-    # prefix = os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix)
-    # arg_params, aux_params = load_param(prefix, config.TEST.test_epoch, process=True)
-    #
-    # # infer shape
-    # data_shape_dict = dict(test_data.provide_data_single)
-    # sym_instance.infer_shape(data_shape_dict)
-    #
-    # sym_instance.check_parameter_shapes(arg_params, aux_params, data_shape_dict, is_train=False)
-    #
-    # # decide maximum shape
-    # data_names = [k[0] for k in test_data.provide_data_single]
-    # label_names = None
-    # max_data_shape = [[('data', (1, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]]
-
-    test_rcnn(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path,
-              config.dataset.dataset_path,
-              ctx,
-              os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]),
-                           config.TRAIN.model_prefix), config.TEST.test_epoch,
-              args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh,
-              logger=logger, output_path=final_output_path)
-
-    print 'done'
-
-
+    test_rcnn(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
+              ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
+              args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
 
 if __name__ == '__main__':
     main()
