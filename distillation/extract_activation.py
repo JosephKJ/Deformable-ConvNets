@@ -27,10 +27,10 @@ from utils.create_logger import create_logger
 
 
 def main():
-    ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]
-    print args
 
-    logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
+    print args
+    print config.gpus
+    # logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
 
 
 if __name__ == '__main__':
