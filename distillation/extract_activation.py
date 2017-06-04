@@ -44,6 +44,7 @@ def main():
 
     # get test data iter
     print len(ctx)
+    print len(roidb)
     test_data = TestLoader(roidb, config, batch_size=len(ctx), shuffle=True, has_rpn=True)
     print 'Loaded iterators'
 
