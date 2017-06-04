@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-# Distilling Convolutional Networks
+# Distilling R-FCN Networks
 # Author: Joseph K J
 # --------------------------------------------------------
 
@@ -32,6 +32,7 @@ def main():
     print '---'
     print args
     print config.symbol
+    print config.gpus
     print '---'
     # logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
 
