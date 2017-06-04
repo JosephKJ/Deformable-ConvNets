@@ -30,12 +30,18 @@ from utils.create_logger import create_logger
 def main():
     ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]
     print args
-    print '***'
-    print args.cfg
-    print '***'
+
     logger, final_output_path = create_logger(config.output_path, args.cfg, 'activations')
-    print final_output_path
-    print ctx
+
+    # load symbol and testing data
+    sym_instance = eval(config.symbol + '.' + config.symbol)()
+    sym = sym_instance.get_symbol(config, is_train=False)
+    imdb = eval(config.dataset.dataset)(config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path, result_path=final_output_path)
+    roidb = imdb.gt_roidb()
+
+    print 'done'
+
+
 
 if __name__ == '__main__':
     main()
