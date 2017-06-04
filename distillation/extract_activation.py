@@ -60,7 +60,6 @@ def main():
     label_names = None
     max_data_shape = [[('data', (1, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]]
 
-    print max_data_shape
     print 'done'
 
 
