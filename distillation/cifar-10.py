@@ -98,7 +98,8 @@ flatten = mx.sym.Flatten(data=relu3)
 fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=10)
 # Softmax
 lenet = mx.sym.SoftmaxOutput(data=fc1, name='softmax')
-
+print 'fc1 is: '
+print fc1
 
 print 'Building Module.'
 # Module
