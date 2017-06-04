@@ -8,6 +8,8 @@ import _init_paths
 import argparse
 import os
 import sys
+from symbols import *
+from dataset import *
 from config.config import config, update_config
 
 def parse_args():
