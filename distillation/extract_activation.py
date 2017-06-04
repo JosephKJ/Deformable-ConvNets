@@ -91,14 +91,19 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
 
     print max_data_shape
     print 'Done.'
-    #
-    # # create predictor
-    # predictor = Predictor(sym, data_names, label_names,
-    #                       context=ctx, max_data_shapes=max_data_shape,
-    #                       provide_data=test_data.provide_data, provide_label=test_data.provide_label,
-    #                       arg_params=arg_params, aux_params=aux_params)
-    #
-    # # start detection
+
+
+    # create predictor
+    predictor = Predictor(sym, data_names, label_names,
+                          context=ctx, max_data_shapes=max_data_shape,
+                          provide_data=test_data.provide_data, provide_label=test_data.provide_label,
+                          arg_params=arg_params, aux_params=aux_params)
+
+    for im_info, data_batch in test_data:
+        output_all = predictor.predict(data_batch)
+        print output_all
+
+    # start detection
     # pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
 
 
