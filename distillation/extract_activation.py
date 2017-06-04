@@ -31,7 +31,7 @@ def main():
     ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]
     print args
 
-    logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
+    logger, final_output_path = create_logger(config.output_path, args.cfg, 'activations')
     print final_output_path
     print ctx
 
