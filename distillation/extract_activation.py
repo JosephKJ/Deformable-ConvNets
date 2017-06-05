@@ -20,6 +20,7 @@ from symbols import *
 from dataset import *
 from core.loader import TestLoader
 from core.tester import Predictor, pred_eval
+from extractor import Extractor
 from utils.load_model import load_param
 from config.config import config, update_config
 
@@ -90,18 +91,18 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
         max_data_shape.append(('rois', (cfg.TEST.PROPOSAL_POST_NMS_TOP_N + 30, 5)))
 
     print max_data_shape
-    print 'Done.'
-
 
     # create predictor
-    predictor = Predictor(sym, data_names, label_names,
+    extractor = Extractor(sym, data_names, label_names,
                           context=ctx, max_data_shapes=max_data_shape,
                           provide_data=test_data.provide_data, provide_label=test_data.provide_label,
                           arg_params=arg_params, aux_params=aux_params)
 
     for im_info, data_batch in test_data:
-        output_all = predictor.predict(data_batch)
-        print output_all
+        output_all = extractor.extract(data_batch)
+
+    print output_all
+    print 'Done'
 
     # start detection
     # pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
