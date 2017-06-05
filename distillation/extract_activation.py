@@ -1,9 +1,9 @@
 # --------------------------------------------------------
-# Deformable Convolutional Networks
+# Distillation of Deformable Convolutional Networks
 # Copyright (c) 2016 by Contributors
 # Copyright (c) 2017 Microsoft
 # Licensed under The Apache-2.0 License [see LICENSE for details]
-# Modified by Yuwen Xiong
+# Modified by Joseph K J
 # --------------------------------------------------------
 
 import _init_paths
@@ -55,7 +55,7 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
         assert False, 'require a logger'
 
     # print cfg
-    pprint.pprint(cfg)
+    # pprint.pprint(cfg)
     logger.info('testing cfg:{}\n'.format(pprint.pformat(cfg)))
 
     # load symbol and testing data
@@ -92,20 +92,22 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
 
     print max_data_shape
 
-    # create predictor
+    # create extractor
     extractor = Extractor(sym, data_names, label_names,
                           context=ctx, max_data_shapes=max_data_shape,
                           provide_data=test_data.provide_data, provide_label=test_data.provide_label,
                           arg_params=arg_params, aux_params=aux_params)
 
+
     for im_info, data_batch in test_data:
         output_all = extractor.extract(data_batch)
 
     print output_all
+
     print 'Done'
 
     # start detection
-    # pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
+    # pred_eval(extractor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
 
 
 def main():
@@ -118,6 +120,8 @@ def main():
                    ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
                    args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
 
+    print ('Done main')
 
 if __name__ == '__main__':
     main()
+    print ('Done Main-Main')
