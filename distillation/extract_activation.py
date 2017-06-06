@@ -106,10 +106,10 @@ def main():
     ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]
     print args
 
-    logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
+    logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.get_activation_for)
     output_folder = os.path.join(config.output_path, args.cfg.split('/')[-1].split('.')[0])
 
-    get_activation(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
+    get_activation(config, config.dataset.dataset, config.dataset.get_activation_for, config.dataset.root_path, config.dataset.dataset_path,
                    ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
                    args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path, output_folder=output_folder)
 

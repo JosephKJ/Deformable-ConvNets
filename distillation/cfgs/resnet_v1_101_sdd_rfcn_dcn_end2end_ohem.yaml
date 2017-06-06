@@ -47,14 +47,6 @@ network:
   - 16
   - 32
   NUM_ANCHORS: 9
-#dataset:
-#  NUM_CLASSES: 21
-#  dataset: PascalVOC
-#  dataset_path: "./data/VOCdevkit"
-#  image_set: 2007_trainval+2012_trainval
-#  root_path: "./data"
-#  test_image_set: 2007_test
-#  proposal: rpn
 dataset:
   NUM_CLASSES: 7
   dataset: StanfordDroneDataset
@@ -62,6 +54,7 @@ dataset:
   image_set: trainval
   root_path: "./data"
   test_image_set: test
+  get_activation_for: trainval
   proposal: rpn
 TRAIN:
   lr: 0.0005
