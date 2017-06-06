@@ -98,7 +98,7 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
 
     time.sleep(1)
     write_activations(extractor, test_data, cfg.output_path)
-    print 'Done'
+    print 'Done.'
 
 
 def main():
