@@ -52,6 +52,7 @@ def write_activations(extractor, test_data, output_path):
             res4b22_relu_output = output['res4b22_relu_output'].asnumpy()[0]
             pickle_activation(output_path, label[count].split('/')[-1], res4b22_relu_output)
             count += 1
+        break
 
 
 def pickle_activation(path, file_name, activation):
