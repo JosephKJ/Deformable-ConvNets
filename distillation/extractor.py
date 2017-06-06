@@ -4,6 +4,8 @@
 # --------------------------------------------------------
 import mxnet as mx
 import _init_paths
+import cPickle
+import os
 
 from core.module import MutableModule
 from utils.PrefetchingIter import PrefetchingIter
@@ -52,7 +54,7 @@ def write_activations(extractor, test_data, output_path):
 
 
 def pickle_activation(path, file_name, activation):
-    print path
-    print file_name
-    print activation.shape
-    print len(activation)
+    cache_file = os.path.join(path, file_name + '-actv')
+    with open(cache_file, 'wb') as fid:
+        cPickle.dump(activation, fid, cPickle.HIGHEST_PROTOCOL)
+    print 'Pickled %s', file_name
