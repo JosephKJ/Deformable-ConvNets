@@ -105,7 +105,7 @@ def main():
     print args
 
     logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
-    output_folder = os.path.join(config.output_path, args.cfg.split('.')[0])
+    output_folder = os.path.join(config.output_path, args.cfg.split('/')[-1].split('.')[0])
 
     get_activation(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
                    ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,

@@ -33,8 +33,9 @@ def write_activations(extractor, test_data, output_path):
 
     data_names = [k[0] for k in test_data.provide_data[0]]
 
-    # if not isinstance(test_data, PrefetchingIter):
-    #     test_data = PrefetchingIter(test_data)
+    if not isinstance(test_data, PrefetchingIter):
+        test_data = PrefetchingIter(test_data)
+
     i = 0
     for im_info, data_batch in test_data:
         scales = [iim_info[0, 2] for iim_info in im_info]
@@ -54,7 +55,10 @@ def write_activations(extractor, test_data, output_path):
 
 
 def pickle_activation(path, file_name, activation):
+    path += '/activations'
+    if not os.path.exists(path):
+        os.mkdir(path)
     cache_file = os.path.join(path, file_name + '-actv')
     with open(cache_file, 'wb') as fid:
         cPickle.dump(activation, fid, cPickle.HIGHEST_PROTOCOL)
-    print 'Pickled %s', file_name
+    print 'Pickled ', file_name
