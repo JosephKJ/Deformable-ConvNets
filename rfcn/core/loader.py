@@ -100,6 +100,9 @@ class TestLoader(mx.io.DataIter):
             data, label, im_info = get_rpn_testbatch(roidb, self.cfg)
         else:
             data, label, im_info = get_rcnn_testbatch(roidb, self.cfg)
+
+        self.label = [roidb[i]['image'] for i in range(len(data))]
+
         self.data = [[mx.nd.array(idata[name]) for name in self.data_name] for idata in data]
         self.im_info = im_info
 

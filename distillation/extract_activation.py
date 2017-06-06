@@ -20,7 +20,7 @@ from symbols import *
 from dataset import *
 from core.loader import TestLoader
 from core.tester import Predictor, pred_eval
-from extractor import Extractor
+from extractor import Extractor, write_activations
 from utils.load_model import load_param
 from config.config import config, update_config
 
@@ -61,7 +61,7 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
     # load symbol and testing data
     if has_rpn:
         sym_instance = eval(cfg.symbol + '.' + cfg.symbol)()
-        sym = sym_instance.get_symbol(cfg, is_train=False)
+        sym = sym_instance.get_symbol_of_fourth_layer(cfg, is_train=False)
         imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
         roidb = imdb.gt_roidb()
     else:
@@ -90,24 +90,15 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
     if not has_rpn:
         max_data_shape.append(('rois', (cfg.TEST.PROPOSAL_POST_NMS_TOP_N + 30, 5)))
 
-    print max_data_shape
-
     # create extractor
     extractor = Extractor(sym, data_names, label_names,
                           context=ctx, max_data_shapes=max_data_shape,
                           provide_data=test_data.provide_data, provide_label=test_data.provide_label,
                           arg_params=arg_params, aux_params=aux_params)
 
-
-    for im_info, data_batch in test_data:
-        output_all = extractor.extract(data_batch)
-
-    print output_all
-
+    time.sleep(1)
+    write_activations(extractor, test_data, cfg.output_path)
     print 'Done'
-
-    # start detection
-    # pred_eval(extractor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
 
 
 def main():
@@ -120,8 +111,5 @@ def main():
                    ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
                    args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
 
-    print ('Done main')
-
 if __name__ == '__main__':
     main()
-    print ('Done Main-Main')
