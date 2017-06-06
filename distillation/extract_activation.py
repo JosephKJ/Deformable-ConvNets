@@ -24,8 +24,9 @@ from extractor import Extractor, write_activations
 from utils.load_model import load_param
 from config.config import config, update_config
 
+
 def parse_args():
-    parser = argparse.ArgumentParser(description='Test a R-FCN network')
+    parser = argparse.ArgumentParser(description='Extract the activations of 4b22 layer and pickle it to output folder')
     # general
     parser.add_argument('--cfg', help='experiment configure file name', required=True, type=str)
 
