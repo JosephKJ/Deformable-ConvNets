@@ -10,6 +10,7 @@ import os
 from core.module import MutableModule
 from utils.PrefetchingIter import PrefetchingIter
 
+
 class Extractor(object):
     def __init__(self, symbol, data_names, label_names,
                  context=mx.cpu(), max_data_shapes=None,
