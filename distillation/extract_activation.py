@@ -50,7 +50,7 @@ from utils.create_logger import create_logger
 
 def get_activation(cfg, dataset, image_set, root_path, dataset_path,
                    ctx, prefix, epoch,
-                   vis, ignore_cache, shuffle, has_rpn, proposal, thresh, logger=None, output_path=None):
+                   vis, ignore_cache, shuffle, has_rpn, proposal, thresh, logger=None, output_path=None, output_folder=None):
     if not logger:
         assert False, 'require a logger'
 
@@ -97,9 +97,7 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
                           arg_params=arg_params, aux_params=aux_params)
 
     time.sleep(1)
-    print prefix
-    print '---*---'
-    write_activations(extractor, test_data, cfg.output_path)
+    write_activations(extractor, test_data, output_folder)
     print 'Done.'
 
 
@@ -108,10 +106,11 @@ def main():
     print args
 
     logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.test_image_set)
+    output_folder = os.path.join(config.output_path, args.cfg.split('.')[0])
 
     get_activation(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
                    ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
-                   args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
+                   args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path, output_folder=output_folder)
 
 if __name__ == '__main__':
     main()
