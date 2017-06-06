@@ -54,8 +54,7 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
     if not logger:
         assert False, 'require a logger'
 
-    # print cfg
-    # pprint.pprint(cfg)
+    pprint.pprint(cfg)
     logger.info('testing cfg:{}\n'.format(pprint.pformat(cfg)))
 
     # load symbol and testing data
