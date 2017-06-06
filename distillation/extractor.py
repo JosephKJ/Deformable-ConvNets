@@ -36,7 +36,6 @@ def write_activations(extractor, test_data, output_path):
     if not isinstance(test_data, PrefetchingIter):
         test_data = PrefetchingIter(test_data)
 
-    i = 0
     for im_info, data_batch in test_data:
         scales = [iim_info[0, 2] for iim_info in im_info]
         output_all = extractor.extract(data_batch)
@@ -48,10 +47,6 @@ def write_activations(extractor, test_data, output_path):
             res4b22_relu_output = output['res4b22_relu_output'].asnumpy()[0]
             pickle_activation(output_path, label[count].split('/')[-1], res4b22_relu_output)
             count += 1
-
-        i += 1
-        if i == 1:
-            break
 
 
 def pickle_activation(path, file_name, activation):
