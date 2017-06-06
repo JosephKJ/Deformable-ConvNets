@@ -61,4 +61,3 @@ def pickle_activation(path, file_name, activation):
     cache_file = os.path.join(path, file_name + '-actv')
     with open(cache_file, 'wb') as fid:
         cPickle.dump(activation, fid, cPickle.HIGHEST_PROTOCOL)
-    print 'Pickled ', file_name
