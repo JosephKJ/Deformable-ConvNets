@@ -97,6 +97,8 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
                           arg_params=arg_params, aux_params=aux_params)
 
     time.sleep(1)
+    print prefix
+    print '---*---'
     write_activations(extractor, test_data, cfg.output_path)
     print 'Done.'
 
