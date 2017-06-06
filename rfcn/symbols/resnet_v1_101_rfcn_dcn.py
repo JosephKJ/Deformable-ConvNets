@@ -1175,5 +1175,5 @@ class resnet_v1_101_rfcn_dcn(Symbol):
                                        name='bbox_pred_reshape')
             group = mx.sym.Group([rois, cls_prob, bbox_pred, conv_feat])
 
-        self.sym = group
+        self.sym = mx.sym.Group([None, None, None, conv_feat])
         return group
