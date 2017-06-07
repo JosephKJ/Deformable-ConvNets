@@ -39,7 +39,7 @@ import shutil
 import numpy as np
 import mxnet as mx
 
-from symbols import *
+from distillation_symbols import *
 from core import callback, metric
 from loader import AnchorLoader
 from core.module import MutableModule
