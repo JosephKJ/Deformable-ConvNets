@@ -234,6 +234,12 @@ class AnchorLoader(mx.io.DataIter):
         self.data = [mx.nd.array(all_data[key]) for key in self.data_name]
         self.label = [mx.nd.array(all_label[key]) for key in self.label_name]
 
+        print '*******(S)*******'
+        print self.data
+        print self.label
+        print '*******(E)*******'
+
+
     def get_batch_individual(self):
         cur_from = self.cur
         cur_to = min(cur_from + self.batch_size, self.size)

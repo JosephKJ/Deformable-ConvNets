@@ -58,18 +58,19 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
     shutil.copy2(os.path.join(curr_path, 'distillation_symbols', config.symbol + '.py'), final_output_path)
     sym_instance = eval(config.symbol + '.' + config.symbol)()
     sym = sym_instance.get_symbol(config, is_train=True)
-    feat_sym = sym.get_internals()['rpn_cls_score_output']
+    feat_sym = sym
 
     # setup multi-gpu
     batch_size = len(ctx)
     input_batch_size = config.TRAIN.BATCH_IMAGES * batch_size
 
     # print config
-    pprint.pprint(config)
+    # pprint.pprint(config)
     logger.info('training config:{}\n'.format(pprint.pformat(config)))
 
     # load dataset and prepare imdb for training
     image_sets = [iset for iset in config.dataset.image_set.split('+')]
+    print image_sets
     roidbs = [load_gt_roidb(config.dataset.dataset, image_set, config.dataset.root_path, config.dataset.dataset_path,
                             flip=config.TRAIN.FLIP)
               for image_set in image_sets]
