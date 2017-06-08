@@ -115,22 +115,6 @@ class ActivationLoader(mx.io.DataIter):
         # get testing data for multigpu
         data, _ = get_rpn_batch(iroidb, self.cfg)
         label = self.load_activation(iroidb[0]['image'])
-        print 'data:', data.keys()
-        print 'label:', label.keys()
-
-        # print 'image:', iroidb[0]['image']
-        # data_shape = {k: v.shape for k, v in data.items()}
-        # del data_shape['im_info']
-        # _, feat_shape, _ = self.feat_sym.infer_shape(**data_shape)
-        # feat_shape = [int(i) for i in feat_shape[0]]
-        #
-        # # add gt_boxes to data for e2e
-        # data['gt_boxes'] = label['gt_boxes'][np.newaxis, :, :]
-
-        # assign anchor for label
-        # label = assign_anchor(feat_shape, label['gt_boxes'], data['im_info'], self.cfg,
-        #                       self.feat_stride, self.anchor_scales,
-        #                       self.anchor_ratios, self.allowed_border)
         return {'data': data, 'label': label}
 
     def load_activation(self, file_name):
