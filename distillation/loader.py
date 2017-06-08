@@ -1,10 +1,14 @@
 import _init_paths
 import mxnet as mx
 import numpy as np
+from mxnet.executor_manager import _split_input_slice
+
+from rpn.rpn import get_rpn_batch, assign_anchor
+
 
 class ActivationLoader(mx.io.DataIter):
 
-    def __init__(self, feat_sym, roidb, cfg, batch_size=1, shuffle=False, ctx=None):
+    def __init__(self, feat_sym, roidb, cfg, batch_size=1, shuffle=False, ctx=None, work_load_list=None):
         super(ActivationLoader, self).__init__()
         self.feat_sym = feat_sym
         self.roidb = roidb
@@ -12,6 +16,7 @@ class ActivationLoader(mx.io.DataIter):
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.ctx = ctx
+        self.work_load_list = work_load_list
         if self.ctx is None:
             self.ctx = [mx.cpu()]
 
@@ -76,8 +81,50 @@ class ActivationLoader(mx.io.DataIter):
         else:
             return 0
 
-    def get_batch_individual(self):
-        pass
-
     def infer_shape(self, max_data_shape=None, max_label_shape=None):
-        pass
+        return max_data_shape, max_label_shape
+
+    def get_batch_individual(self):
+        cur_from = self.cur
+        cur_to = min(cur_from + self.batch_size, self.size)
+        roidb = [self.roidb[self.index[i]] for i in range(cur_from, cur_to)]
+
+        # decide multi device slice
+        work_load_list = self.work_load_list
+        ctx = self.ctx
+        if work_load_list is None:
+            work_load_list = [1] * len(ctx)
+        assert isinstance(work_load_list, list) and len(work_load_list) == len(ctx), \
+            "Invalid settings for work load. "
+        slices = _split_input_slice(self.batch_size, work_load_list)
+        rst = []
+        for idx, islice in enumerate(slices):
+            iroidb = [roidb[i] for i in range(islice.start, islice.stop)]
+            rst.append(self.get_data_and_label_for_each_image(iroidb))
+
+        all_data = [_['data'] for _ in rst]
+        all_label = [_['label'] for _ in rst]
+        self.data = [[mx.nd.array(data[key]) for key in self.data_name] for data in all_data]
+        self.label = [[mx.nd.array(label[key]) for key in self.label_name] for label in all_label]
+
+    def get_data_and_label_for_each_image(self, iroidb):
+        # get testing data for multigpu
+        data, label = get_rpn_batch(iroidb, self.cfg)
+        print 'data:', data.keys()
+        print 'label:', label.keys()
+
+
+        # print 'image:', iroidb[0]['image']
+        # data_shape = {k: v.shape for k, v in data.items()}
+        # del data_shape['im_info']
+        # _, feat_shape, _ = self.feat_sym.infer_shape(**data_shape)
+        # feat_shape = [int(i) for i in feat_shape[0]]
+        #
+        # # add gt_boxes to data for e2e
+        # data['gt_boxes'] = label['gt_boxes'][np.newaxis, :, :]
+
+        # assign anchor for label
+        # label = assign_anchor(feat_shape, label['gt_boxes'], data['im_info'], self.cfg,
+        #                       self.feat_stride, self.anchor_scales,
+        #                       self.anchor_ratios, self.allowed_border)
+        return {'data': data, 'label': label}
