@@ -86,6 +86,14 @@ class ActivationLoader(mx.io.DataIter):
             return 0
 
     def infer_shape(self, max_data_shape=None, max_label_shape=None):
+        if max_data_shape is None:
+            max_data_shape = []
+        if max_label_shape is None:
+            max_label_shape = []
+        max_shapes = dict(max_data_shape + max_label_shape)
+        _, feat_shape, _ = self.feat_sym.infer_shape(**max_shapes)
+        max_label_shape = [(self.label_name[0], feat_shape[0])]
+
         return max_data_shape, max_label_shape
 
     def get_batch_individual(self):
