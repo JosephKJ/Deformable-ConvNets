@@ -17,7 +17,7 @@ class student_symbol(Symbol):
 
         # Conv-BN-Relu 1
         conv1 = mx.symbol.Convolution(name='conv1', data=data, kernel=(7,7), num_filter=64,
-                                      pad=(3, 3), stride=(2, 2), no_bias=True)
+                                      pad=(3, 3), stride=(2, 2))
         bn_conv1 = mx.symbol.BatchNorm(name='bn_conv1', data=conv1, use_global_stats=True,
                                        fix_gamma=False, eps=self.eps)
         relu1 = mx.symbol.Activation(name='conv1_relu', data=bn_conv1, act_type="relu")
@@ -28,21 +28,21 @@ class student_symbol(Symbol):
 
         # Conv-BN-Relu 2
         conv2 = mx.symbol.Convolution(name='conv2', data=pool1, kernel=(1,1), num_filter=256,
-                                      pad=(0, 0), stride=(1, 1), no_bias=True)
+                                      pad=(0, 0), stride=(1, 1))
         bn_conv2 = mx.symbol.BatchNorm(name='bn_conv2', data=conv2, use_global_stats=True,
                                        fix_gamma=False, eps=self.eps)
         relu2 = mx.symbol.Activation(name='conv2_relu', data=bn_conv2, act_type="relu")
 
         # Conv-BN-Relu 3
         conv3 = mx.symbol.Convolution(name='conv3', data=relu2, kernel=(1,1), num_filter=512,
-                                      pad=(0, 0), stride=(2, 2), no_bias=True)
+                                      pad=(0, 0), stride=(2, 2))
         bn_conv3 = mx.symbol.BatchNorm(name='bn_conv3', data=conv3, use_global_stats=True,
                                        fix_gamma=False, eps=self.eps)
         relu3 = mx.symbol.Activation(name='conv3_relu', data=bn_conv3, act_type="relu")
 
         # Conv-BN-Relu 4
         conv4 = mx.symbol.Convolution(name='conv4', data=relu3, kernel=(1,1), num_filter=1024,
-                                      pad=(0, 0), stride=(2, 2), no_bias=True)
+                                      pad=(0, 0), stride=(2, 2))
         bn_conv4 = mx.symbol.BatchNorm(name='bn_conv4', data=conv4, use_global_stats=True,
                                        fix_gamma=False, eps=self.eps)
         relu4 = mx.symbol.Activation(name='conv4_relu', data=bn_conv4, act_type="relu")
@@ -65,12 +65,28 @@ class student_symbol(Symbol):
     def init_weights(self, cfg, arg_params, aux_params):
         arg_params['conv1_weight'] = mx.random.normal(0, 0.01, shape=self.arg_shape_dict['conv1_weight'])
         arg_params['conv1_bias'] = mx.nd.zeros(shape=self.arg_shape_dict['conv1_bias'])
+        arg_params['bn_conv1_gamma'] = mx.nd.ones(shape=self.arg_shape_dict['bn_conv1_gamma'])
+        arg_params['bn_conv1_beta'] = mx.nd.zeros(shape=self.arg_shape_dict['bn_conv1_beta'])
+        aux_params['bn_conv1_moving_var'] = mx.nd.ones(shape=self.aux_shape_dict['bn_conv1_moving_var'])
+        aux_params['bn_conv1_moving_mean'] = mx.nd.zeros(shape=self.aux_shape_dict['bn_conv1_moving_mean'])
 
         arg_params['conv2_weight'] = mx.random.normal(0, 0.01, shape=self.arg_shape_dict['conv2_weight'])
         arg_params['conv2_bias'] = mx.nd.zeros(shape=self.arg_shape_dict['conv2_bias'])
+        arg_params['bn_conv2_gamma'] = mx.nd.ones(shape=self.arg_shape_dict['bn_conv2_gamma'])
+        arg_params['bn_conv2_beta'] = mx.nd.zeros(shape=self.arg_shape_dict['bn_conv2_beta'])
+        aux_params['bn_conv2_moving_var'] = mx.nd.ones(shape=self.aux_shape_dict['bn_conv2_moving_var'])
+        aux_params['bn_conv2_moving_mean'] = mx.nd.zeros(shape=self.aux_shape_dict['bn_conv2_moving_mean'])
 
         arg_params['conv3_weight'] = mx.random.normal(0, 0.01, shape=self.arg_shape_dict['conv3_weight'])
         arg_params['conv3_bias'] = mx.nd.zeros(shape=self.arg_shape_dict['conv3_bias'])
+        arg_params['bn_conv3_gamma'] = mx.nd.ones(shape=self.arg_shape_dict['bn_conv3_gamma'])
+        arg_params['bn_conv3_beta'] = mx.nd.zeros(shape=self.arg_shape_dict['bn_conv3_beta'])
+        aux_params['bn_conv3_moving_var'] = mx.nd.ones(shape=self.aux_shape_dict['bn_conv3_moving_var'])
+        aux_params['bn_conv3_moving_mean'] = mx.nd.zeros(shape=self.aux_shape_dict['bn_conv3_moving_mean'])
 
         arg_params['conv4_weight'] = mx.random.normal(0, 0.01, shape=self.arg_shape_dict['conv4_weight'])
         arg_params['conv4_bias'] = mx.nd.zeros(shape=self.arg_shape_dict['conv4_bias'])
+        arg_params['bn_conv4_gamma'] = mx.nd.ones(shape=self.arg_shape_dict['bn_conv4_gamma'])
+        arg_params['bn_conv4_beta'] = mx.nd.zeros(shape=self.arg_shape_dict['bn_conv4_beta'])
+        aux_params['bn_conv4_moving_var'] = mx.nd.ones(shape=self.aux_shape_dict['bn_conv4_moving_var'])
+        aux_params['bn_conv4_moving_mean'] = mx.nd.zeros(shape=self.aux_shape_dict['bn_conv4_moving_mean'])
