@@ -78,3 +78,6 @@ class ActivationLoader(mx.io.DataIter):
 
     def get_batch_individual(self):
         pass
+
+    def infer_shape(self, max_data_shape=None, max_label_shape=None):
+        pass
