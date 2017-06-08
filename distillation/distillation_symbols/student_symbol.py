@@ -50,10 +50,27 @@ class student_symbol(Symbol):
         return relu4
 
     def get_symbol(self, cfg, is_train=True):
-        data = mx.sym.Variable(name="data")
-        symbol = self.create_symbol(data)
-        self.sym = symbol
-        return symbol
+        data = mx.sym.Variable(name='data')
+        label = mx.sym.Variable(name='label')
+
+        # Getting all the convolutions
+        conv_symbol = self.create_symbol(data)
+
+        # Adding the mean-squared-loss
+        mse_symbol = mx.symbol.LinearRegressionOutput(name='mse', data=conv_symbol, label=label)
+
+        self.sym = mse_symbol
+        return mse_symbol
 
     def init_weights(self, cfg, arg_params, aux_params):
-        pass
+        arg_params['conv1_weight'] = mx.random.normal(0, 0.01, shape=self.arg_shape_dict['conv1_weight'])
+        arg_params['conv1_bias'] = mx.nd.zeros(shape=self.arg_shape_dict['conv1_bias'])
+
+        arg_params['conv2_weight'] = mx.random.normal(0, 0.01, shape=self.arg_shape_dict['conv2_weight'])
+        arg_params['conv2_bias'] = mx.nd.zeros(shape=self.arg_shape_dict['conv2_bias'])
+
+        arg_params['conv3_weight'] = mx.random.normal(0, 0.01, shape=self.arg_shape_dict['conv3_weight'])
+        arg_params['conv3_bias'] = mx.nd.zeros(shape=self.arg_shape_dict['conv3_bias'])
+
+        arg_params['conv4_weight'] = mx.random.normal(0, 0.01, shape=self.arg_shape_dict['conv4_weight'])
+        arg_params['conv4_bias'] = mx.nd.zeros(shape=self.arg_shape_dict['conv4_bias'])
