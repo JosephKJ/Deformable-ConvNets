@@ -1,6 +1,9 @@
 import _init_paths
 import mxnet as mx
 import numpy as np
+import os
+import cPickle
+
 from mxnet.executor_manager import _split_input_slice
 
 from rpn.rpn import get_rpn_batch, assign_anchor
@@ -8,7 +11,7 @@ from rpn.rpn import get_rpn_batch, assign_anchor
 
 class ActivationLoader(mx.io.DataIter):
 
-    def __init__(self, feat_sym, roidb, cfg, batch_size=1, shuffle=False, ctx=None, work_load_list=None):
+    def __init__(self, feat_sym, roidb, cfg, batch_size=1, shuffle=False, ctx=None, work_load_list=None, output_folder=None):
         super(ActivationLoader, self).__init__()
         self.feat_sym = feat_sym
         self.roidb = roidb
@@ -17,6 +20,7 @@ class ActivationLoader(mx.io.DataIter):
         self.shuffle = shuffle
         self.ctx = ctx
         self.work_load_list = work_load_list
+        self.output_folder = output_folder + '/activations'
         if self.ctx is None:
             self.ctx = [mx.cpu()]
 
@@ -109,10 +113,10 @@ class ActivationLoader(mx.io.DataIter):
 
     def get_data_and_label_for_each_image(self, iroidb):
         # get testing data for multigpu
-        data, label = get_rpn_batch(iroidb, self.cfg)
+        data, _ = get_rpn_batch(iroidb, self.cfg)
+        label = self.load_activation(iroidb[0]['image'])
         print 'data:', data.keys()
         print 'label:', label.keys()
-
 
         # print 'image:', iroidb[0]['image']
         # data_shape = {k: v.shape for k, v in data.items()}
@@ -128,3 +132,15 @@ class ActivationLoader(mx.io.DataIter):
         #                       self.feat_stride, self.anchor_scales,
         #                       self.anchor_ratios, self.allowed_border)
         return {'data': data, 'label': label}
+
+    def load_activation(self, file_name):
+        acts_file = os.path.join(self.output_folder, file_name.split('/')[-1] + '-actv')
+        assert os.path.exists(acts_file), 'The activation file does not exist: {}'.format(acts_file)
+
+        with open(acts_file, 'rb') as fid:
+            acts = cPickle.load(fid)
+
+        acts = np.array([acts])
+        label = {'label': acts}
+
+        return label

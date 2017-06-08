@@ -53,6 +53,7 @@ from utils.lr_scheduler import WarmupMultiFactorScheduler
 def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, lr_step):
     logger, final_output_path = create_logger(config.output_path, args.cfg, 'training_student')
     prefix = os.path.join(final_output_path, prefix)
+    output_folder = os.path.join(config.output_path, args.cfg.split('/')[-1].split('.')[0])
 
     # load symbol
     shutil.copy2(os.path.join(curr_path, 'distillation_symbols', config.symbol + '.py'), final_output_path)
@@ -69,7 +70,7 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
     logger.info('training config:{}\n'.format(pprint.pformat(config)))
 
     # load dataset and prepare imdb for training
-    image_sets = [iset for iset in config.dataset.image_set.split('+')]
+    image_sets = [config.dataset.get_activation_for]
     print image_sets
     roidbs = [load_gt_roidb(config.dataset.dataset, image_set, config.dataset.root_path, config.dataset.dataset_path,
                             flip=config.TRAIN.FLIP)
@@ -78,7 +79,7 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
     roidb = filter_roidb(roidb, config)
 
     # load training data
-    train_data = ActivationLoader(feat_sym, roidb, config, batch_size=input_batch_size, shuffle=config.TRAIN.SHUFFLE, ctx=ctx)
+    train_data = ActivationLoader(feat_sym, roidb, config, batch_size=input_batch_size, shuffle=config.TRAIN.SHUFFLE, ctx=ctx, output_folder=output_folder)
 
     # infer max shape
     max_data_shape = [('data', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]
@@ -99,7 +100,7 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
         arg_params, aux_params = load_param(prefix, begin_epoch, convert=True)
     else:
         arg_params, aux_params = load_param(pretrained, epoch, convert=True)
-        sym_instance.init_weight(config, arg_params, aux_params)
+        sym_instance.init_weights(config, arg_params, aux_params)
 
     # check parameter shapes
     sym_instance.check_parameter_shapes(arg_params, aux_params, data_shape_dict)
