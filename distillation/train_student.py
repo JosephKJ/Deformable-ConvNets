@@ -41,7 +41,7 @@ import mxnet as mx
 
 from distillation_symbols import *
 from core import callback, metric
-from loader import AnchorLoader
+from loader import ActivationLoader
 from core.module import MutableModule
 from utils.create_logger import create_logger
 from utils.load_data import load_gt_roidb, merge_roidb, filter_roidb
@@ -78,9 +78,7 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
     roidb = filter_roidb(roidb, config)
 
     # load training data
-    train_data = AnchorLoader(feat_sym, roidb, config, batch_size=input_batch_size, shuffle=config.TRAIN.SHUFFLE, ctx=ctx,
-                              feat_stride=config.network.RPN_FEAT_STRIDE, anchor_scales=config.network.ANCHOR_SCALES,
-                              anchor_ratios=config.network.ANCHOR_RATIOS, aspect_grouping=config.TRAIN.ASPECT_GROUPING)
+    train_data = ActivationLoader(feat_sym, roidb, config, batch_size=input_batch_size, shuffle=config.TRAIN.SHUFFLE, ctx=ctx)
 
     # infer max shape
     max_data_shape = [('data', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]
