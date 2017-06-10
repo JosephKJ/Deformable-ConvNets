@@ -47,6 +47,7 @@ sys.path.insert(0, os.path.join(curr_path, '../external/mxnet', config.MXNET_VER
 
 import mxnet as mx
 from utils.create_logger import create_logger
+from distillation_symbols import *
 
 
 def get_activation(cfg, dataset, image_set, root_path, dataset_path,
