@@ -1052,7 +1052,7 @@ class resnet_v1_101_rfcn_dcn(Symbol):
         self.sym = group
         return group
 
-    def get_symbol_of_student_teacher_graft(self, cfg, is_train=True):
+    def get_symbol_of_student_teacher_graft(self, cfg, student_sym_instance, is_train=False):
 
         # config alias for convenient
         num_classes = cfg.dataset.NUM_CLASSES
@@ -1072,7 +1072,7 @@ class resnet_v1_101_rfcn_dcn(Symbol):
             im_info = mx.sym.Variable(name="im_info")
 
         # shared convolutional layers
-        conv_feat = self.get_resnet_v1_conv4(data)
+        conv_feat = student_sym_instance.create_symbol(data)
         # res5
         relu1 = self.get_resnet_v1_conv5(conv_feat)
 

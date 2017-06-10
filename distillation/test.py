@@ -45,6 +45,7 @@ from core.tester import Predictor, pred_eval
 from utils.load_model import load_param
 from symbols import *
 from dataset import *
+from distillation_symbols import *
 
 
 def test_network(cfg, dataset, image_set, root_path, dataset_path,
@@ -56,23 +57,18 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
     # print cfg
     pprint.pprint(cfg)
     logger.info('testing cfg:{}\n'.format(pprint.pformat(cfg)))
-    #
-    # # load symbol and testing data
-    # if has_rpn:
-    #     sym_instance = eval(cfg.test_symbol + '.' + cfg.test_symbol)()
-    #     sym = sym_instance.get_symbol(cfg, is_train=False)
-    #     imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
-    #     roidb = imdb.gt_roidb()
-    # else:
-    #     sym_instance = eval(cfg.symbol + '.' + cfg.symbol)()
-    #     sym = sym_instance.get_symbol_rfcn(cfg, is_train=False)
-    #     imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
-    #     gt_roidb = imdb.gt_roidb()
-    #     roidb = eval('imdb.' + proposal + '_roidb')(gt_roidb)
-    #
+
+    # load symbol and testing data
+    sym_instance = eval(cfg.test_symbol + '.' + cfg.test_symbol)()
+    student_sym_instance = eval(cfg.test_symbol + '.' + cfg.test_symbol)()
+    sym = sym_instance.get_symbol_of_student_teacher_graft(cfg, student_sym_instance, is_train=False)
+
+    # imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
+    # roidb = imdb.gt_roidb()
+
     # # get test data iter
     # test_data = TestLoader(roidb, cfg, batch_size=len(ctx), shuffle=shuffle, has_rpn=has_rpn)
-    #
+
     # # load model
     # arg_params, aux_params = load_param(prefix, epoch, process=True)
     #
