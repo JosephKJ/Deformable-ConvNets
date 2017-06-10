@@ -56,47 +56,48 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
     # print cfg
     pprint.pprint(cfg)
     logger.info('testing cfg:{}\n'.format(pprint.pformat(cfg)))
-
-    # load symbol and testing data
-    if has_rpn:
-        sym_instance = eval(cfg.symbol + '.' + cfg.symbol)()
-        sym = sym_instance.get_symbol(cfg, is_train=False)
-        imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
-        roidb = imdb.gt_roidb()
-    else:
-        sym_instance = eval(cfg.symbol + '.' + cfg.symbol)()
-        sym = sym_instance.get_symbol_rfcn(cfg, is_train=False)
-        imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
-        gt_roidb = imdb.gt_roidb()
-        roidb = eval('imdb.' + proposal + '_roidb')(gt_roidb)
-
-    # get test data iter
-    test_data = TestLoader(roidb, cfg, batch_size=len(ctx), shuffle=shuffle, has_rpn=has_rpn)
-
-    # load model
-    arg_params, aux_params = load_param(prefix, epoch, process=True)
-
-    # infer shape
-    data_shape_dict = dict(test_data.provide_data_single)
-    sym_instance.infer_shape(data_shape_dict)
-
-    sym_instance.check_parameter_shapes(arg_params, aux_params, data_shape_dict, is_train=False)
-
-    # decide maximum shape
-    data_names = [k[0] for k in test_data.provide_data_single]
-    label_names = None
-    max_data_shape = [[('data', (1, 3, max([v[0] for v in cfg.SCALES]), max([v[1] for v in cfg.SCALES])))]]
-    if not has_rpn:
-        max_data_shape.append(('rois', (cfg.TEST.PROPOSAL_POST_NMS_TOP_N + 30, 5)))
-
-    # create predictor
-    predictor = Predictor(sym, data_names, label_names,
-                          context=ctx, max_data_shapes=max_data_shape,
-                          provide_data=test_data.provide_data, provide_label=test_data.provide_label,
-                          arg_params=arg_params, aux_params=aux_params)
-
-    # start detection
-    pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
+    print cfg.is_teacher_student_network
+    #
+    # # load symbol and testing data
+    # if has_rpn:
+    #     sym_instance = eval(cfg.test_symbol + '.' + cfg.test_symbol)()
+    #     sym = sym_instance.get_symbol(cfg, is_train=False)
+    #     imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
+    #     roidb = imdb.gt_roidb()
+    # else:
+    #     sym_instance = eval(cfg.symbol + '.' + cfg.symbol)()
+    #     sym = sym_instance.get_symbol_rfcn(cfg, is_train=False)
+    #     imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
+    #     gt_roidb = imdb.gt_roidb()
+    #     roidb = eval('imdb.' + proposal + '_roidb')(gt_roidb)
+    #
+    # # get test data iter
+    # test_data = TestLoader(roidb, cfg, batch_size=len(ctx), shuffle=shuffle, has_rpn=has_rpn)
+    #
+    # # load model
+    # arg_params, aux_params = load_param(prefix, epoch, process=True)
+    #
+    # # infer shape
+    # data_shape_dict = dict(test_data.provide_data_single)
+    # sym_instance.infer_shape(data_shape_dict)
+    #
+    # sym_instance.check_parameter_shapes(arg_params, aux_params, data_shape_dict, is_train=False)
+    #
+    # # decide maximum shape
+    # data_names = [k[0] for k in test_data.provide_data_single]
+    # label_names = None
+    # max_data_shape = [[('data', (1, 3, max([v[0] for v in cfg.SCALES]), max([v[1] for v in cfg.SCALES])))]]
+    # if not has_rpn:
+    #     max_data_shape.append(('rois', (cfg.TEST.PROPOSAL_POST_NMS_TOP_N + 30, 5)))
+    #
+    # # create predictor
+    # predictor = Predictor(sym, data_names, label_names,
+    #                       context=ctx, max_data_shapes=max_data_shape,
+    #                       provide_data=test_data.provide_data, provide_label=test_data.provide_label,
+    #                       arg_params=arg_params, aux_params=aux_params)
+    #
+    # # start detection
+    # pred_eval(predictor, test_data, imdb, cfg, vis=vis, ignore_cache=ignore_cache, thresh=thresh, logger=logger)
 
 
 def main():
@@ -106,9 +107,9 @@ def main():
     logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.get_activation_for)
     output_folder = os.path.join(config.output_path, args.cfg.split('/')[-1].split('.')[0])
 
-    # test_network(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
-    #           ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
-    #           args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
+    test_network(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
+              ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
+              args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
 
 if __name__ == '__main__':
     main()

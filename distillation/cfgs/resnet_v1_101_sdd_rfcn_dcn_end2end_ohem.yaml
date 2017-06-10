@@ -2,8 +2,10 @@
 MXNET_VERSION: "mxnet"
 output_path: "./output/rfcn_dcn/sdd"
 symbol: student_symbol
+test_symbol: resnet_v1_101_rfcn_dcn
 gpus: '0,1,2,3'
 CLASS_AGNOSTIC: true
+is_teacher_student_network: true
 SCALES:
 - 600
 - 1000
