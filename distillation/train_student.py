@@ -53,7 +53,7 @@ import callback
 
 
 def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, lr_step):
-    logger, final_output_path = create_logger(config.output_path, args.cfg, 'training_student')
+    logger, final_output_path = create_logger(config.output_path, args.cfg, config.distillation_output_folder_name)
     prefix = os.path.join(final_output_path, prefix)
     output_folder = os.path.join(config.output_path, args.cfg.split('/')[-1].split('.')[0])
 

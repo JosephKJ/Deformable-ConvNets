@@ -50,7 +50,7 @@ from distillation_symbols import *
 
 def test_network(cfg, dataset, image_set, root_path, dataset_path,
               ctx, prefix, epoch,
-              vis, ignore_cache, shuffle, has_rpn, proposal, thresh, logger=None, output_path=None):
+              vis, ignore_cache, shuffle, has_rpn, proposal, thresh, logger=None, output_path=None, output_folder=None):
     if not logger:
         assert False, 'require a logger'
 
@@ -65,12 +65,19 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
     imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
     roidb = imdb.gt_roidb()
 
-    # # get test data iter
-    # test_data = TestLoader(roidb, cfg, batch_size=len(ctx), shuffle=shuffle, has_rpn=has_rpn)
+    # get test data iter
+    test_data = TestLoader(roidb, cfg, batch_size=len(ctx), shuffle=shuffle, has_rpn=has_rpn)
 
-    # # load model
-    # arg_params, aux_params = load_param(prefix, epoch, process=True)
-    #
+    # load model
+    arg_params, aux_params = load_param(prefix, epoch, process=True)
+    print prefix
+    print output_folder
+    print '--------(S)--------'
+    print len(arg_params)
+    print '--------(M)--------'
+    print len(aux_params)
+    print '--------(E)--------'
+
     # # infer shape
     # data_shape_dict = dict(test_data.provide_data_single)
     # sym_instance.infer_shape(data_shape_dict)
@@ -103,7 +110,7 @@ def main():
 
     test_network(config, config.dataset.dataset, config.dataset.test_image_set, config.dataset.root_path, config.dataset.dataset_path,
               ctx, os.path.join(final_output_path, '..', '_'.join([iset for iset in config.dataset.image_set.split('+')]), config.TRAIN.model_prefix), config.TEST.test_epoch,
-              args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path)
+              args.vis, args.ignore_cache, args.shuffle, config.TEST.HAS_RPN, config.dataset.proposal, args.thresh, logger=logger, output_path=final_output_path, output_folder=output_folder)
 
 if __name__ == '__main__':
     main()

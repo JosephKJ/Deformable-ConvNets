@@ -14,6 +14,7 @@ config = edict()
 
 config.MXNET_VERSION = ''
 config.output_path = ''
+config.distillation_output_folder_name = ''
 config.symbol = ''
 config.test_symbol = ''
 config.gpus = ''

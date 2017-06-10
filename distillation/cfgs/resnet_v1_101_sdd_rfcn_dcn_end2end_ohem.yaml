@@ -1,6 +1,7 @@
 ---
 MXNET_VERSION: "mxnet"
 output_path: "./output/rfcn_dcn/sdd"
+distillation_output_folder_name: "training_student"
 symbol: student_symbol
 test_symbol: resnet_v1_101_rfcn_dcn
 gpus: '0,1,2,3'
