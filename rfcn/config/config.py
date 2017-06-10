@@ -15,6 +15,7 @@ config = edict()
 config.MXNET_VERSION = ''
 config.output_path = ''
 config.symbol = ''
+config.test_symbol = ''
 config.gpus = ''
 config.CLASS_AGNOSTIC = True
 config.SCALES = [(600, 1000)]  # first is scale (the shorter side); second is max size
