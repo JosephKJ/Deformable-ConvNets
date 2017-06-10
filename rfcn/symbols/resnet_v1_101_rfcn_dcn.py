@@ -1073,6 +1073,7 @@ class resnet_v1_101_rfcn_dcn(Symbol):
 
         # shared convolutional layers
         conv_feat = student_sym_instance.create_symbol(data)
+
         # res5
         relu1 = self.get_resnet_v1_conv5(conv_feat)
 

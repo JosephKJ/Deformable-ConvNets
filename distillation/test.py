@@ -55,16 +55,15 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
         assert False, 'require a logger'
 
     # print cfg
-    pprint.pprint(cfg)
+    # pprint.pprint(cfg)
     logger.info('testing cfg:{}\n'.format(pprint.pformat(cfg)))
 
     # load symbol and testing data
     sym_instance = eval(cfg.test_symbol + '.' + cfg.test_symbol)()
     student_sym_instance = eval(cfg.symbol + '.' + cfg.symbol)()
     sym = sym_instance.get_symbol_of_student_teacher_graft(cfg, student_sym_instance, is_train=False)
-
-    # imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
-    # roidb = imdb.gt_roidb()
+    imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
+    roidb = imdb.gt_roidb()
 
     # # get test data iter
     # test_data = TestLoader(roidb, cfg, batch_size=len(ctx), shuffle=shuffle, has_rpn=has_rpn)
@@ -97,7 +96,7 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
 
 def main():
     ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]
-    print args
+    # print args
 
     logger, final_output_path = create_logger(config.output_path, args.cfg, config.dataset.get_activation_for)
     output_folder = os.path.join(config.output_path, args.cfg.split('/')[-1].split('.')[0])
