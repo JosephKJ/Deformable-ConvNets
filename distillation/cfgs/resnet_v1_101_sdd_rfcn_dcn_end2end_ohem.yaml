@@ -56,7 +56,7 @@ dataset:
   image_set: trainval
   root_path: "./data"
   test_image_set: test
-  get_activation_for: test
+  get_activation_for: trainval
   proposal: rpn
 TRAIN:
   lr: 0.0005
