@@ -60,7 +60,7 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
 
     # load symbol and testing data
     sym_instance = eval(cfg.test_symbol + '.' + cfg.test_symbol)()
-    student_sym_instance = eval(cfg.test_symbol + '.' + cfg.test_symbol)()
+    student_sym_instance = eval(cfg.symbol + '.' + cfg.symbol)()
     sym = sym_instance.get_symbol_of_student_teacher_graft(cfg, student_sym_instance, is_train=False)
 
     # imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
