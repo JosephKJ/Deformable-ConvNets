@@ -56,7 +56,6 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
     # print cfg
     pprint.pprint(cfg)
     logger.info('testing cfg:{}\n'.format(pprint.pformat(cfg)))
-    print cfg.is_teacher_student_network
     #
     # # load symbol and testing data
     # if has_rpn:
