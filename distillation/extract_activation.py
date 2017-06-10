@@ -47,8 +47,6 @@ sys.path.insert(0, os.path.join(curr_path, '../external/mxnet', config.MXNET_VER
 
 import mxnet as mx
 from utils.create_logger import create_logger
-from distillation_symbols import *
-
 
 def get_activation(cfg, dataset, image_set, root_path, dataset_path,
                    ctx, prefix, epoch,
@@ -61,7 +59,7 @@ def get_activation(cfg, dataset, image_set, root_path, dataset_path,
 
     # load symbol and testing data
     if has_rpn:
-        sym_instance = eval(cfg.symbol + '.' + cfg.symbol)()
+        sym_instance = eval(cfg.test_symbol + '.' + cfg.test_symbol)()
         sym = sym_instance.get_symbol_of_fourth_layer(cfg, is_train=False)
         imdb = eval(dataset)(image_set, root_path, dataset_path, result_path=output_path)
         roidb = imdb.gt_roidb()
