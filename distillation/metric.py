@@ -9,7 +9,7 @@ def get_names():
 
 class DistillationMetric(mx.metric.EvalMetric):
     def __init__(self):
-        super(DistillationMetric, self).__init__('Student_Accuracy')
+        super(DistillationMetric, self).__init__('Student_Loss')
         self.pred, self.label = get_names()
 
     def update(self, labels, preds):
