@@ -69,12 +69,26 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
     test_data = TestLoader(roidb, cfg, batch_size=len(ctx), shuffle=shuffle, has_rpn=has_rpn)
 
     # load model
+    distillation_folder_prefix = os.path.join(output_folder, cfg.distillation_output_folder_name, cfg.TRAIN.model_prefix)
     arg_params, aux_params = load_param(prefix, epoch, process=True)
-    print prefix
-    print output_folder
+    arg_params_student, aux_params_student = load_param(distillation_folder_prefix, epoch, process=True)
+
     print '--------(S)--------'
+    print prefix
+    print distillation_folder_prefix
     print len(arg_params)
-    print '--------(M)--------'
+    print len(aux_params)
+    print len(arg_params_student)
+    print len(aux_params_student)
+    print arg_params_student
+    print aux_params_student
+    print type(arg_params_student)
+    print type(aux_params_student)
+
+    arg_params.update(arg_params_student)
+    aux_params.update(aux_params_student)
+
+    print len(arg_params)
     print len(aux_params)
     print '--------(E)--------'
 
