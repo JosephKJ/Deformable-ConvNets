@@ -40,7 +40,7 @@ import numpy as np
 import mxnet as mx
 
 from distillation_symbols import *
-from core import callback
+
 from loader import ActivationLoader
 from core.module import MutableModule
 from utils.create_logger import create_logger
@@ -49,6 +49,7 @@ from utils.load_model import load_param
 from utils.PrefetchingIter import PrefetchingIter
 from utils.lr_scheduler import WarmupMultiFactorScheduler
 import metric
+import callback
 
 
 def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, lr_step):
@@ -120,19 +121,11 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
 
     # decide training params
     # metric
-    # rpn_eval_metric = metric.RPNAccMetric()
-    # rpn_cls_metric = metric.RPNLogLossMetric()
-    # rpn_bbox_metric = metric.RPNL1LossMetric()
-    # eval_metric = metric.RCNNAccMetric(config)
-    # cls_metric = metric.RCNNLogLossMetric(config)
-    # bbox_metric = metric.RCNNL1LossMetric(config)
     distillation_metric = metric.DistillationMetric()
     eval_metrics = mx.metric.CompositeEvalMetric()
-    # rpn_eval_metric, rpn_cls_metric, rpn_bbox_metric, eval_metric, cls_metric, bbox_metric
     for child_metric in [distillation_metric]:
         eval_metrics.add(child_metric)
-    # for child_metric in [rpn_eval_metric, rpn_cls_metric, rpn_bbox_metric, eval_metric, cls_metric, bbox_metric]:
-    #     eval_metrics.add(child_metric)
+
     # callback
     batch_end_callback = callback.Speedometer(train_data.batch_size, frequent=args.frequent)
     means = np.tile(np.array(config.TRAIN.BBOX_MEANS), 2 if config.CLASS_AGNOSTIC else config.dataset.NUM_CLASSES)
