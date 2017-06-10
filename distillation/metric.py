@@ -1,6 +1,8 @@
 import mxnet as mx
 import numpy as np
 
+# Ref: https://github.com/dmlc/mxnet/blob/master/python/mxnet/metric.py#L124
+
 def get_names():
     pred = ['data']
     label = ['label']
