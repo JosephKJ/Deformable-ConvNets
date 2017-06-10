@@ -73,31 +73,15 @@ def test_network(cfg, dataset, image_set, root_path, dataset_path,
     arg_params, aux_params = load_param(prefix, epoch, process=True)
     arg_params_student, aux_params_student = load_param(distillation_folder_prefix, epoch, process=True)
 
-    print '--------(S)--------'
-    print prefix
-    print distillation_folder_prefix
-    print len(arg_params)
-    print len(aux_params)
-    print len(arg_params_student)
-    print len(aux_params_student)
-    print arg_params_student
-    print aux_params_student
-    print type(arg_params_student)
-    print type(aux_params_student)
-
     arg_params.update(arg_params_student)
     aux_params.update(aux_params_student)
 
-    print len(arg_params)
-    print len(aux_params)
-    print '--------(E)--------'
+    # infer shape
+    data_shape_dict = dict(test_data.provide_data_single)
+    sym_instance.infer_shape(data_shape_dict)
 
-    # # infer shape
-    # data_shape_dict = dict(test_data.provide_data_single)
-    # sym_instance.infer_shape(data_shape_dict)
-    #
-    # sym_instance.check_parameter_shapes(arg_params, aux_params, data_shape_dict, is_train=False)
-    #
+    sym_instance.check_parameter_shapes(arg_params, aux_params, data_shape_dict, is_train=False)
+
     # # decide maximum shape
     # data_names = [k[0] for k in test_data.provide_data_single]
     # label_names = None
