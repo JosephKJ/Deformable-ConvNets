@@ -59,7 +59,8 @@ dataset:
   get_activation_for: trainval
   proposal: rpn
 TRAIN:
-  lr: 0.0005
+  lr: .001
+  # lr: 0.0005
   lr_step: '4.83'
   warmup: true
   warmup_lr: 0.00005
@@ -152,4 +153,3 @@ TEST:
   # RCNN nms
   NMS: 0.3
   test_epoch: 7
-
