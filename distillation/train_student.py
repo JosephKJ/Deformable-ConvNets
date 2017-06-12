@@ -129,9 +129,8 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
     mae = mx.metric.create('mae')
     mse = mx.metric.create('mse')
     rmse = mx.metric.create('rmse')
-    top_k_accuracy = mx.metric.create('top_k_accuracy')
     eval_metrics = mx.metric.CompositeEvalMetric()
-    for child_metric in [accuracy, ce, f1, mae, mse, rmse, top_k_accuracy]:
+    for child_metric in [accuracy, ce, f1, mae, mse, rmse]:
         eval_metrics.add(child_metric)
 
     # callback
