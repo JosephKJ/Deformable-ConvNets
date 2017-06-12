@@ -120,10 +120,18 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
         mod._preload_opt_states = '%s-%04d.states'%(prefix, begin_epoch)
 
     # decide training params
+
     # metric
     distillation_metric = metric.DistillationMetric()
+    accuracy = mx.metric.create('acc')
+    ce = mx.metric.create('ce')
+    f1 = mx.metric.create('f1')
+    mae = mx.metric.create('mae')
+    mse = mx.metric.create('mse')
+    rmse = mx.metric.create('rmse')
+    top_k_accuracy = mx.metric.create('top_k_accuracy')
     eval_metrics = mx.metric.CompositeEvalMetric()
-    for child_metric in [distillation_metric]:
+    for child_metric in [accuracy, ce, f1, mae, mse, rmse, top_k_accuracy]:
         eval_metrics.add(child_metric)
 
     # callback
@@ -152,12 +160,7 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
         train_data = PrefetchingIter(train_data)
 
     # train
-    # mod.fit(train_data, eval_metric=eval_metrics, epoch_end_callback=epoch_end_callback,
-    #         batch_end_callback=batch_end_callback, kvstore=config.default.kvstore,
-    #         optimizer='sgd', optimizer_params=optimizer_params,
-    #         arg_params=arg_params, aux_params=aux_params, begin_epoch=begin_epoch, num_epoch=end_epoch)
-
-    mod.fit(train_data, epoch_end_callback=epoch_end_callback,
+    mod.fit(train_data, eval_metric=eval_metrics, epoch_end_callback=epoch_end_callback,
             batch_end_callback=batch_end_callback, kvstore=config.default.kvstore,
             optimizer='sgd', optimizer_params=optimizer_params,
             arg_params=arg_params, aux_params=aux_params, begin_epoch=begin_epoch, num_epoch=end_epoch)

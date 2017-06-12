@@ -32,8 +32,9 @@ class Speedometer(object):
                 s = ''
                 if param.eval_metric is not None:
                     name, value = param.eval_metric.get()
-                    s = "Epoch[%d] Batch [%d]\tSpeed: %.2f samples/sec\t" % (param.epoch, count, speed)
-                    s += "%s=%f,\t" % (name, value)
+                    s = "Epoch[%d] Batch [%d]\tSpeed: %.2f samples/sec\tTraining Student-" % (param.epoch, count, speed)
+                    for n, v in zip(name, value):
+                        s += "%s=%f,\t" % (n, v)
                 else:
                     s = "Iter[%d] Batch [%d]\tSpeed: %.2f samples/sec" % (param.epoch, count, speed)
 
