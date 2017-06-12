@@ -124,13 +124,12 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch, lr, 
     # metric
     distillation_metric = metric.DistillationMetric()
     accuracy = mx.metric.create('acc')
-    ce = mx.metric.create('ce')
-    f1 = mx.metric.create('f1')
     mae = mx.metric.create('mae')
     mse = mx.metric.create('mse')
     rmse = mx.metric.create('rmse')
     eval_metrics = mx.metric.CompositeEvalMetric()
-    for child_metric in [accuracy, ce, f1, mae, mse, rmse]:
+    # , ce, f1, mae, mse, rmse
+    for child_metric in [accuracy, mae, mse, rmse]:
         eval_metrics.add(child_metric)
 
     # callback
